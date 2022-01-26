@@ -12,6 +12,7 @@
 #*******************************************************************************
 import os
 import sys
+sys.path.append("/mnt/users/grevell/tools/anim_sim")
 
 # Qt
 from Qt import QtWidgets, QtGui, QtCore, QtCompat

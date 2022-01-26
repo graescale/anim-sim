@@ -74,7 +74,7 @@ def get_integral(anim_data, degree):
 
 
 def smooth_data(data, window, order):
-    """ Smooths list of numbers using Savitzky–Golay filter.
+    """ Smooths list of numbers using Savitzky-Golay filter.
     
     Args:
         data (list): The numbers to smooth.
