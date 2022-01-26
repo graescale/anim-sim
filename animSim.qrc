@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="arrows">
+    <file>img/helicopter-icon-21952.png</file>
+    <file>img/double_down_arrow_icon.png</file>
+  </qresource>
+</RCC>
