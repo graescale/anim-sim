@@ -84,7 +84,7 @@ def smooth_data(data, window, order):
         list: Smoothed data.
     """
 
-    print('|smoothData|')
+    print('|smooth_data|')
 
     return scipy.signal.savgol_filter(data, window, order) 
 
