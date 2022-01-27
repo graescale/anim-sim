@@ -129,8 +129,8 @@ class Flyer:
 
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
         self.raw_pos_axis_2 = raw_anim_data['translate' + axis_2]
-        self.pos_axis_1 = smoothData(self.raw_pos_axis_1, self.fidelity, polyOrder)
-        self.pos_axis_2 = smoothData(self.raw_pos_axis_2, self.fidelity, polyOrder)
+        self.pos_axis_1 = smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
+        self.pos_axis_2 = smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
         self.accel_axis_1 = self.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
         self.accel_axis_2 = self.get_derivative(self.pos_axis_2, 2, True, self.fidelity)  
 
