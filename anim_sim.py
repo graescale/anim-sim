@@ -30,6 +30,7 @@ IMG_PATH = CURRENT_PATH + "/img/{}.png"
 
 #*******************************************************************************
 # CLASS
+
 class Flyer:
     def __init__(self, name):
         self.name = name
@@ -77,18 +78,12 @@ class Flyer:
         print('|get_anim_data|')
         self.create_world_space_buffer()
         # Make a list of the key_frames to be used later in both modes.
-        self.key_frames = cmds.keyframe(self.name + '_buffer_raw',
-                                        attribute=['translate', 'rotate'],
-                                        query=True,
-                                        timeChange=True)
+        self.key_frames = cmds.keyframe(self.name + '_buffer_raw', attribute=['translate', 'rotate'], query=True, timeChange=True)
 
         # Make a dictionary containing lists of keyframe values for each attribute.
         anim_data = {}
         for attr in attributes:
-            anim_data[attr] = cmds.keyframe(self.name + '_buffer_raw',
-                                            attribute='.' + attr,
-                                            query=True,
-                                            valueChange=True)  
+            anim_data[attr] = cmds.keyframe(self.name + '_buffer_raw', attribute='.' + attr, query=True, valueChange=True)  
         return anim_data
     
 
