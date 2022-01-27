@@ -1,8 +1,8 @@
 #*******************************************************************************
 # content = Simulates hovering motion.
 #
-# version      = 0.4.1
-# date         = 2021-12-19
+# version      = 1.0.0
+# date         = 2022-01-26
 # how to       => anim_sim = animSim()
 #
 # dependencies = Maya
@@ -13,8 +13,6 @@
 import os
 import sys
 
-# Qt
-from Qt import QtWidgets, QtGui, QtCore, QtCompat
 from helpers import *
 
 import pymel.core as pm
@@ -32,13 +30,6 @@ IMG_PATH = CURRENT_PATH + "/img/{}.png"
 
 #*******************************************************************************
 # CLASS
-#
-# The main reason I used a class here is becuase the user may need to run the
-# script on multiple Maya objects. By creating a class I can store and access
-# all the relevant data in a single object and create as many instances of it as
-# necessary.
-# 
-
 class Flyer:
     def __init__(self, name):
         self.name = name
@@ -238,92 +229,3 @@ class Flyer:
         for key in self.pos_axis_1_dict:
             cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] / -scale + self.start_pos_axis_1) )
             cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] / scale + self.start_pos_axis_2) )
-
-#*******************************************************************************
-# UI
-class AnimSim:
-    def __init__(self):
-        self.scale = None
-        self.fidelity  = None
-        self.autoPrePost = 1
-        self.flyer = None
-        
-        path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
-        self.wgAnimSim = QtCompat.loadUi(path_ui)
-        
-        # ICONS
-        self.wgAnimSim.setWindowIcon(QtGui.QPixmap(IMG_PATH.format("helicopter-icon-21952")))
-        self.wgAnimSim.lblRotDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
-        self.wgAnimSim.lblTransDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
-
-        #***********************************************************************
-        # SIGNAL
-        
-        # SELECT
-        self.wgAnimSim.btnTarget.clicked.connect(self.press_btnTarget)
-        self.wgAnimSim.btnParent.clicked.connect(self.press_btnParent)
-        
-        # PARAMETERS
-        self.wgAnimSim.cbxMotionPlane.currentIndexChanged.connect(self.press_cbxMotionPlane)
-        self.wgAnimSim.sldScale.valueChanged.connect(self.press_sldScale)
-        self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
-        self.wgAnimSim.chkAutoRoll.stateChanged.connect(self.press_chkAutoRoll)
-
-        # SYNC
-        self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)
-        self.wgAnimSim.btnTranslation.clicked.connect(self.press_btnTranslation)
-        
-        self.wgAnimSim.show()
-
-    #***************************************************************************
-    # PRESS
-
-    def press_btnTarget(self):
-        if len(cmds.ls(sl=True)) == 1:
-            target = cmds.ls( sl=True )[0]
-            self.flyer = Flyer(target)
-            self.wgAnimSim.lblCurrentTarget.setText(target)
-        else:
-            self.wgAnimSim.lblCurrentTarget.setText("Please choose a single object.") 
-
-    def press_btnParent(self):
-        if len(cmds.ls(sl=True)) == 1:
-            parent = cmds.ls(sl=True)[0]
-            self.flyer.parent = parent
-            self.wgAnimSim.lblCurrentParent.setText(parent)  
-        else:
-            self.wgAnimSim.lblCurrentParent.setText("Please choose a single object.")
- 
-    def press_cbxMotionPlane(self):
-        self.wgAnimSim.lblCurrentTarget.setText("cbxMotionPlane changed")
-
-    def press_sldScale(self):
-        self.wgAnimSim.lblScale.setText(str(self.wgAnimSim.sldScale.value()))
-
-    def press_sldFidelity(self):
-        self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
-
-    def press_btnRotation(self):
-        plane = list(str(self.wgAnimSim.cbxMotionPlane.currectText()))
-        self.flyer.scale = self.wgAnimSim.sldScale.value()
-        self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
-        self.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
-
-        if (fidelity % 2) == 0:
-            print('fidelity value must be an odd number')
-        else:
-            self.flyer.derive_rotation(plane[0], plane[1], 3)
-
-    def press_btnTranslation(self):
-        print('|integrate_translation_callback|')
-        plane = list(str(self.wgAnimSim.cbxMotionPlane.currectText()))
-        self.flyer.scale = self.wgAnimSim.sldScale.value()
-        self.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
-        self.flyer.integrate_translation(plane[0], plane[1])         
- 
-#*******************************************************************
-# START
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    classVar = AnimSim()
-    app.exec_()
