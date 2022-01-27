@@ -76,7 +76,7 @@ class Flyer:
         """
 
         print('|get_anim_data|')
-        self.create_world_space_buffer()
+        create_world_space_buffer()
         # Make a list of the key_frames to be used later in both modes.
         self.key_frames = cmds.keyframe(self.name + '_buffer_raw', attribute=['translate', 'rotate'], query=True, timeChange=True)
 
@@ -124,17 +124,17 @@ class Flyer:
         """
 
         print('|derive_rotation|')
-        self.get_scene_data()
-        raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
+        get_scene_data()
+        raw_anim_data = get_anim_data(['translate' + axis_1, 'translate' + axis_2])
 
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
         self.raw_pos_axis_2 = raw_anim_data['translate' + axis_2]
         self.pos_axis_1 = smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
         self.pos_axis_2 = smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
-        self.accel_axis_1 = self.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
-        self.accel_axis_2 = self.get_derivative(self.pos_axis_2, 2, True, self.fidelity)  
+        self.accel_axis_1 = get_derivative(self.pos_axis_1, 2, True, self.fidelity)
+        self.accel_axis_2 = get_derivative(self.pos_axis_2, 2, True, self.fidelity)  
 
-        self.copy_to_rotation(self.scale, axis_1, axis_2)
+        copy_to_rotation(self.scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
 
@@ -151,8 +151,8 @@ class Flyer:
         """
 
         print('|integrate_translation|') 
-        self.get_scene_data()
-        raw_anim_data = self.get_anim_data(['rotate' + axis_1, 'rotate' + axis_2, 'translate' + axis_1, 'translate' + axis_2])
+        get_scene_data()
+        raw_anim_data = get_anim_data(['rotate' + axis_1, 'rotate' + axis_2, 'translate' + axis_1, 'translate' + axis_2])
         self.rot_axis_1 = raw_anim_data['rotate' + axis_1]
         self.rot_axis_2 = raw_anim_data['rotate' + axis_2]   
 
@@ -161,10 +161,10 @@ class Flyer:
         self.start_pos_axis_2 = cmds.getAttr( self.name + '.translate' + axis_2, time=self.start_frame - self.autoRoll )
 
         # Swap axes because the integral of the rotation in axis_1 is the translation in axis_2
-        self.pos_axis_2 = self.get_integral(self.rot_axis_1, 2)
-        self.pos_axis_1 = self.get_integral(self.rot_axis_2, 2)
+        self.pos_axis_2 = get_integral(self.rot_axis_1, 2)
+        self.pos_axis_1 = get_integral(self.rot_axis_2, 2)
 
-        self.copy_to_translation(scale, axis_1, axis_2)
+        copy_to_translation(scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
 #*******************************************************************************

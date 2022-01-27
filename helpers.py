@@ -4,7 +4,7 @@
 # version      = 0.4.1
 # date         = 2021-12-19
 #
-# dependencies = Maya
+# dependencies = Maya, numpy, scipy
 #
 # author = Grae Revell <grae.revell@gmail.com>
 #*******************************************************************************
