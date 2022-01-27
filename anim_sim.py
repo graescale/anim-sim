@@ -110,8 +110,6 @@ class Flyer:
        
 #*******************************************************************************
 # PROCESS
-        
-
     def derive_rotation(self, axis_1, axis_2, polyOrder=3 ):
         """ Derives object's rotation from its translation.
         
