@@ -12,7 +12,6 @@
 #*******************************************************************************
 import os
 import sys
-sys.path.append("/mnt/users/grevell/tools/anim_sim")
 
 # Qt
 from Qt import QtWidgets, QtGui, QtCore, QtCompat
@@ -322,3 +321,9 @@ class AnimSim:
         self.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
         self.flyer.integrate_translation(plane[0], plane[1])         
  
+#*******************************************************************
+# START
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    classVar = AnimSim()
+    app.exec_()
