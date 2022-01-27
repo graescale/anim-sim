@@ -38,7 +38,7 @@ class AnimSim:
         self.wgAnimSim.btnParent.clicked.connect(self.press_btnParent)
         
         # PARAMETERS
-        self.wgAnimSim.cbxMotionPlane.currentIndexChanged.connect(self.press_cbxMotionPlane)
+        #self.wgAnimSim.cbxMotionPlane.currentIndexChanged.connect(self.press_cbxMotionPlane)
         self.wgAnimSim.sldScale.valueChanged.connect(self.press_sldScale)
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
@@ -80,9 +80,9 @@ class AnimSim:
         plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
         self.flyer.scale = self.wgAnimSim.sldScale.value()
         self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
-        self.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
+        self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
 
-        if (fidelity % 2) == 0:
+        if (self.flyer.fidelity % 2) == 0:
             print('fidelity value must be an odd number')
         else:
             self.flyer.derive_rotation(plane[0], plane[1], 3)
@@ -91,7 +91,7 @@ class AnimSim:
         print('|integrate_translation_callback|')
         plane = list(str(self.wgAnimSim.cbxMotionPlane.currectText()))
         self.flyer.scale = self.wgAnimSim.sldScale.value()
-        self.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
+        self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
         self.flyer.integrate_translation(plane[0], plane[1])         
  
 #*******************************************************************
