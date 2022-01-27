@@ -52,7 +52,7 @@ class Flyer:
         self.fidelity = 0
         self.scale = 0
         self.auto_roll = None
-        self.parent = ''
+        self.parent = None
         
 
 
