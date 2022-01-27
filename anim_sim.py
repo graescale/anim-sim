@@ -94,10 +94,10 @@ class Flyer:
         pm.createNode('transform', n = buffer_raw, ss = True)
         cmds.setAttr(buffer_raw + '.rotateOrder', 2)
        
-        if (self.parent is not None):           
-            cmds.parent( buffer_raw, self.parent )
-        else:
+        if self.parent == None:
             print('No parent set.')
+        else:
+            cmds.parent( buffer_raw, self.parent )
 
         # Constrain buffer to object, bake it, delete constraint.
         cmds.parentConstraint(self.name, buffer_raw, name='buffer_constraint')
