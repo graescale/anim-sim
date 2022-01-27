@@ -107,8 +107,7 @@ class Flyer:
             time_range = (self.start_frame - self.fidelity, self.end_frame + self.fidelity)
         cmds.bakeResults(buffer_raw + '.translate', buffer_raw + '.rotate', t=time_range, sb=1)
         cmds.delete('buffer_constraint')
-
- 
+       
 #*******************************************************************************
 # PROCESS
         
