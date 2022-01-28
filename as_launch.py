@@ -11,7 +11,7 @@
 
 # Qt
 from Qt import QtWidgets, QtGui, QtCore, QtCompat
-from anim_sim import *
+import anim_sim
 
 #*******************************************************************************
 # UI
