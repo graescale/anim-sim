@@ -49,9 +49,9 @@ class Flyer:
         self.rot_axis_2_dict = {}
         self.rot_layer_name = ROTATION_LAYER
         self.trans_layer_name = TRANSLATION_LAYER
-        self.fidelity = 0
-        self.scale = 0
-        self.auto_roll = None
+        #self.fidelity = 0
+        #self.scale = 0
+        #self.auto_roll = None
         self.parent = None
         
 
@@ -132,8 +132,8 @@ class Flyer:
         self.pos_axis_1 = helpers.smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
         self.pos_axis_2 = helpers.smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
         self.accel_axis_1 = helpers.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
-        self.accel_axis_2 = helpers.get_derivative(self.pos_axis_2, 2, True, self.fidelity)  
-
+        self.accel_axis_2 = helpers.get_derivative(self.pos_axis_2, 2, True, self.fidelity)
+        
         copy_to_rotation(self.scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
