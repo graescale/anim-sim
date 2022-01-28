@@ -49,9 +49,9 @@ class Flyer:
         self.rot_axis_2_dict = {}
         self.rot_layer_name = ROTATION_LAYER
         self.trans_layer_name = TRANSLATION_LAYER
-        #self.fidelity = 0
-        #self.scale = 0
-        #self.auto_roll = None
+        self.fidelity = 0
+        self.scale = 0
+        self.auto_roll = None
         self.parent = None
         
 

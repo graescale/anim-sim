@@ -17,9 +17,9 @@ import anim_sim
 # UI
 class AnimSim:
     def __init__(self):
-        self.scale = None
-        self.fidelity  = None
-        self.autoPrePost = 1
+        #self.scale = None
+        #self.fidelity  = None
+        #self.autoPrePost = 1
         self.flyer = None
         
         path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
