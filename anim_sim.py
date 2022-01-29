@@ -73,7 +73,7 @@ class Flyer:
         
         Returns:
             dictionary: animation data lists
-        """too  
+        """
 
         print('|get_anim_data|')
         self.create_world_space_buffer()
