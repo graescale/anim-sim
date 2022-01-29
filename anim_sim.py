@@ -13,7 +13,7 @@
 import os
 import sys
 
-from helpers import get_derivative, get_integral, smooth_data, create_anim_layer
+import helpers as h
 
 import pymel.core as pm
 import maya.cmds as cmds
@@ -73,10 +73,10 @@ class Flyer:
         
         Returns:
             dictionary: animation data lists
-        """
+        """too  
 
         print('|get_anim_data|')
-        create_world_space_buffer()
+        self.create_world_space_buffer()
         # Make a list of the key_frames to be used later in both modes.
         self.key_frames = cmds.keyframe(self.name + '_buffer_raw', attribute=['translate', 'rotate'], query=True, timeChange=True)
 
@@ -124,17 +124,17 @@ class Flyer:
         """
 
         print('|derive_rotation|')
-        get_scene_data()
+        self.get_scene_data()
         raw_anim_data = get_anim_data(['translate' + axis_1, 'translate' + axis_2])
 
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
         self.raw_pos_axis_2 = raw_anim_data['translate' + axis_2]
-        self.pos_axis_1 = smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
-        self.pos_axis_2 = smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
-        self.accel_axis_1 = get_derivative(self.pos_axis_1, 2, True, self.fidelity)
-        self.accel_axis_2 = get_derivative(self.pos_axis_2, 2, True, self.fidelity)
+        self.pos_axis_1 = h.smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
+        self.pos_axis_2 = h.smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
+        self.accel_axis_1 = h.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
+        self.accel_axis_2 = h.get_derivative(self.pos_axis_2, 2, True, self.fidelity)
         
-        copy_to_rotation(self.scale, axis_1, axis_2)
+        self.copy_to_rotation(self.scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
 
@@ -151,7 +151,7 @@ class Flyer:
         """
 
         print('|integrate_translation|') 
-        get_scene_data()
+        self.get_scene_data()
         raw_anim_data = get_anim_data(['rotate' + axis_1, 'rotate' + axis_2, 'translate' + axis_1, 'translate' + axis_2])
         self.rot_axis_1 = raw_anim_data['rotate' + axis_1]
         self.rot_axis_2 = raw_anim_data['rotate' + axis_2]   
@@ -161,10 +161,10 @@ class Flyer:
         self.start_pos_axis_2 = cmds.getAttr( self.name + '.translate' + axis_2, time=self.start_frame - self.autoRoll )
 
         # Swap axes because the integral of the rotation in axis_1 is the translation in axis_2
-        self.pos_axis_2 = get_integral(self.rot_axis_1, 2)
-        self.pos_axis_1 = get_integral(self.rot_axis_2, 2)
+        self.pos_axis_2 = h.get_integral(self.rot_axis_1, 2)
+        self.pos_axis_1 = h.get_integral(self.rot_axis_2, 2)
 
-        copy_to_translation(scale, axis_1, axis_2)
+        self.copy_to_translation(scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
 #*******************************************************************************
@@ -184,7 +184,7 @@ class Flyer:
         """
 
         print('|copy_to_rotation|')
-        create_anim_layer(self, self.rot_layer_name)
+        h.create_anim_layer(self, self.rot_layer_name)
         cmds.animLayer(self.rot_layer_name, edit=True, sel=True, prf=True)
 
         self.rot_axis_1 = self.accel_axis_2
@@ -211,7 +211,7 @@ class Flyer:
         """
 
         print('|copy_to_translation|')
-        create_anim_layer(self, self.trans_layer_name)
+        h.create_anim_layer(self, self.trans_layer_name)
         cmds.animLayer(self.trans_layer_name, edit=True, sel=True, prf=True)
 
         # Zip key_frames and position values lists into tuples and then into a dictionary
