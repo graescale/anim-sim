@@ -102,7 +102,7 @@ class Flyer:
         # Constrain buffer to object, bake it, delete constraint.
         cmds.parentConstraint(self.name, buffer_raw, name='buffer_constraint')
         time_range = (self.start_frame, self.end_frame)
-        if self.autoRoll == True:
+        if self.auto_roll == True:
             # Automatically add pre / post roll from the fidelity value
             time_range = (self.start_frame - self.fidelity, self.end_frame + self.fidelity)
         cmds.bakeResults(buffer_raw + '.translate', buffer_raw + '.rotate', t=time_range, sb=1)
@@ -125,7 +125,7 @@ class Flyer:
 
         print('|derive_rotation|')
         self.get_scene_data()
-        raw_anim_data = get_anim_data(['translate' + axis_1, 'translate' + axis_2])
+        raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
 
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
         self.raw_pos_axis_2 = raw_anim_data['translate' + axis_2]
@@ -157,14 +157,14 @@ class Flyer:
         self.rot_axis_2 = raw_anim_data['rotate' + axis_2]   
 
         # Get the local starting position
-        self.start_pos_axis_1 = cmds.getAttr( self.name + '.translate' + axis_1, time=self.start_frame - self.autoRoll )
-        self.start_pos_axis_2 = cmds.getAttr( self.name + '.translate' + axis_2, time=self.start_frame - self.autoRoll )
+        self.start_pos_axis_1 = cmds.getAttr( self.name + '.translate' + axis_1, time=self.start_frame - self.auto_roll )
+        self.start_pos_axis_2 = cmds.getAttr( self.name + '.translate' + axis_2, time=self.start_frame - self.auto_roll )
 
         # Swap axes because the integral of the rotation in axis_1 is the translation in axis_2
         self.pos_axis_2 = h.get_integral(self.rot_axis_1, 2)
         self.pos_axis_1 = h.get_integral(self.rot_axis_2, 2)
 
-        self.copy_to_translation(scale, axis_1, axis_2)
+        self.copy_to_translation(self.scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
 #*******************************************************************************
