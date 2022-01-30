@@ -184,7 +184,7 @@ class Flyer:
         """
 
         print('|copy_to_rotation|')
-        h.create_anim_layer(self, self.rot_layer_name)
+        h.create_anim_layer(self.name, self.rot_layer_name)
         cmds.animLayer(self.rot_layer_name, edit=True, sel=True, prf=True)
 
         self.rot_axis_1 = self.accel_axis_2
