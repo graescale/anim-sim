@@ -90,7 +90,7 @@ def smooth_data(data, window, order):
     return scipy.signal.savgol_filter(data, window, order) 
 
 
-def create_anim_layer(obejct, layer_name):
+def create_anim_layer(object, layer_name):
     """ Creates an animation layer
     
     Args:
