@@ -11,6 +11,7 @@
 
 import numpy as np
 import scipy.signal
+import maya.cmds as cmds
 
 def get_derivative(anim_data, degree, filter_data, window, order=3):
     """ Returns a list containing n degree derivative of supplied list.
