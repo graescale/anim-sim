@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>923</height>
+    <height>870</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -26,7 +26,7 @@
    <string>AnimSim</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="animSim.qrc">
+   <iconset>
     <normaloff>:/arrows/img/helicopter-icon-21952.png</normaloff>:/arrows/img/helicopter-icon-21952.png</iconset>
   </property>
   <property name="styleSheet">

@@ -3,6 +3,7 @@
 #
 # version      = 1.0.0
 # date         = 2022-01-26
+# how to       => import as_launch
 #
 # dependencies = Maya, Qt, anim_sim
 #
@@ -89,7 +90,7 @@ class AnimSim:
 
     def press_btnTranslation(self):
         print('|integrate_translation_callback|')
-        plane = list(str(self.wgAnimSim.cbxMotionPlane.currectText()))
+        plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
         self.flyer.scale = self.wgAnimSim.sldScale.value()
         self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
         self.flyer.integrate_translation(plane[0], plane[1])         

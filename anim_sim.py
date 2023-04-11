@@ -126,14 +126,12 @@ class Flyer:
         print('|derive_rotation|')
         self.get_scene_data()
         raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
-
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
         self.raw_pos_axis_2 = raw_anim_data['translate' + axis_2]
         self.pos_axis_1 = h.smooth_data(self.raw_pos_axis_1, self.fidelity, polyOrder)
         self.pos_axis_2 = h.smooth_data(self.raw_pos_axis_2, self.fidelity, polyOrder)
         self.accel_axis_1 = h.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
         self.accel_axis_2 = h.get_derivative(self.pos_axis_2, 2, True, self.fidelity)
-        
         self.copy_to_rotation(self.scale, axis_1, axis_2)
         cmds.delete(self.name + '_buffer_raw')
 
@@ -151,21 +149,13 @@ class Flyer:
         """
 
         print('|integrate_translation|') 
-        self.get_scene_data()
-        raw_anim_data = get_anim_data(['rotate' + axis_1, 'rotate' + axis_2, 'translate' + axis_1, 'translate' + axis_2])
-        self.rot_axis_1 = raw_anim_data['rotate' + axis_1]
-        self.rot_axis_2 = raw_anim_data['rotate' + axis_2]   
-
         # Get the local starting position
-        self.start_pos_axis_1 = cmds.getAttr( self.name + '.translate' + axis_1, time=self.start_frame - self.auto_roll )
-        self.start_pos_axis_2 = cmds.getAttr( self.name + '.translate' + axis_2, time=self.start_frame - self.auto_roll )
-
-        # Swap axes because the integral of the rotation in axis_1 is the translation in axis_2
-        self.pos_axis_2 = h.get_integral(self.rot_axis_1, 2)
-        self.pos_axis_1 = h.get_integral(self.rot_axis_2, 2)
-
+        self.start_pos_axis_1 = cmds.getAttr(self.name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
+        self.start_pos_axis_2 = cmds.getAttr(self.name + '.translate' + axis_2, time=self.start_frame - self.fidelity)
+        self.pos_axis_1 = h.get_integral(self.rot_axis_1, 2)
+        self.pos_axis_2 = h.get_integral(self.rot_axis_2, 2)
         self.copy_to_translation(self.scale, axis_1, axis_2)
-        cmds.delete(self.name + '_buffer_raw')
+)
 
 #*******************************************************************************
 # APPLY
@@ -184,18 +174,31 @@ class Flyer:
         """
 
         print('|copy_to_rotation|')
+        axis1_mult = 1
+        axis2_mult = 1
         h.create_anim_layer(self.name, self.rot_layer_name)
         cmds.animLayer(self.rot_layer_name, edit=True, sel=True, prf=True)
-
-        self.rot_axis_1 = self.accel_axis_2
-        self.rot_axis_2 = self.accel_axis_1
-
+        if axis_1 == 'X' and axis_2 == 'Y':
+            print('X and Y are true')
+            axis_1 = 'Z'
+            axis1_mult = -1
+            axis_2 = 'X'
+            axis2_mult = -1
+        if axis_1 == 'X' and axis_2 == 'Z':
+            axis_1 = 'Z'
+            axis1_mult = -1
+            axis_2 = 'X'
+        if axis_1 == 'Y' and axis_2 == 'Z':
+            axis_1 = 'Z'
+            axis_2 = 'X'
+        self.rot_axis_1 = self.accel_axis_1
+        self.rot_axis_2 = self.accel_axis_2
         # Zip key_frames and rotation values lists into tuples and then into a dictionary
         self.rot_axis_1_dict = dict(zip(self.key_frames, self.rot_axis_1))
         self.rot_axis_2_dict = dict(zip(self.key_frames, self.rot_axis_2))
         for key in self.rot_axis_1_dict:
-            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_1, value=(self.rot_axis_1_dict[key] * scale) )
-            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_2, value=(self.rot_axis_2_dict[key] * -scale) )
+            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_1, value=(self.rot_axis_1_dict[key] * scale * axis1_mult) )
+            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_2, value=(self.rot_axis_2_dict[key] * scale * axis2_mult) )
   
 
     def copy_to_translation(self, scale, axis_1, axis_2):
@@ -211,13 +214,11 @@ class Flyer:
         """
 
         print('|copy_to_translation|')
-        h.create_anim_layer(self, self.trans_layer_name)
+        h.create_anim_layer(self.name, self.trans_layer_name)
         cmds.animLayer(self.trans_layer_name, edit=True, sel=True, prf=True)
-
         # Zip key_frames and position values lists into tuples and then into a dictionary
         self.pos_axis_1_dict = dict(zip(self.key_frames, self.pos_axis_1))
         self.pos_axis_2_dict = dict(zip(self.key_frames, self.pos_axis_2))
-
         for key in self.pos_axis_1_dict:
-            cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] / -scale + self.start_pos_axis_1) )
-            cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] / scale + self.start_pos_axis_2) )
+            cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] + self.start_pos_axis_1) )
+            cmds.setKeyframe(self.name, animLayer=self.trans_layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] + self.start_pos_axis_2) )
