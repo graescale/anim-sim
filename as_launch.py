@@ -44,7 +44,7 @@ class AnimSim:
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
         # SIM
-        self.wgAnimSim.btnBuild.clicked.connect(self.press....)
+        self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
         #self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)
         #self.wgAnimSim.btnTranslation.clicked.connect(self.press_btnTranslation)
         
