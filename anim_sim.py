@@ -187,7 +187,7 @@ def extract_anim(object, transform):
     anim_layers = cmds.ls(type='animLayer')
     for layer in anim_layers:
         if cmds.animLayer(layer, sel=True, query=True):
-        additional_layers.append(layer)
+            additional_layers.append(layer)
 
     if not cmds.animLayer(EXTRACT_LAYER, query=True, exists=True):
         cmds.animLayer(EXTRACT_LAYER)
