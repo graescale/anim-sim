@@ -43,9 +43,10 @@ class AnimSim:
         self.wgAnimSim.sldScale.valueChanged.connect(self.press_sldScale)
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
-        # SYNC
-        self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)
-        self.wgAnimSim.btnTranslation.clicked.connect(self.press_btnTranslation)
+        # SIM
+        self.wgAnimSim.btnBuild.clicked.connect(self.press....)
+        #self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)
+        #self.wgAnimSim.btnTranslation.clicked.connect(self.press_btnTranslation)
         
         self.wgAnimSim.show()
 
@@ -67,7 +68,7 @@ class AnimSim:
             self.wgAnimSim.lblCurrentParent.setText(parent)  
         else:
             self.wgAnimSim.lblCurrentParent.setText("Please choose a single object.")
- 
+
     #def press_cbxMotionPlane(self):
     #    self.wgAnimSim.lblCurrentTarget.setText("cbxMotionPlane changed")
 
@@ -77,26 +78,37 @@ class AnimSim:
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
-    def press_btnRotation(self):
+    def press_btnBuild(self):
         plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
         self.flyer.scale = self.wgAnimSim.sldScale.value()
         self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
-        self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
+        self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()
 
         if (self.flyer.fidelity % 2) == 0:
             print('fidelity value must be an odd number')
         else:
             self.flyer.derive_rotation(plane[0], plane[1], 3)
+            self.flyer.integrate_translation(plane[0], plane[1])
 
-    def press_btnTranslation(self):
-        print('|integrate_translation_callback|')
-        plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
-        self.flyer.scale = self.wgAnimSim.sldScale.value()
-        self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
-        self.flyer.integrate_translation(plane[0], plane[1])         
+    # def press_btnRotation(self):
+    #     plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
+    #     self.flyer.scale = self.wgAnimSim.sldScale.value()
+    #     self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
+    #     self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()
+
+    #     if (self.flyer.fidelity % 2) == 0:
+    #         print('fidelity value must be an odd number')
+    #     else:
+    #         self.flyer.derive_rotation(plane[0], plane[1], 3)
+
+    # def press_btnTranslation(self):
+    #     plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
+    #     self.flyer.scale = self.wgAnimSim.sldScale.value()
+    #     self.flyer.autoRoll = self.wgAnimSim.chkAutoRoll.isChecked()
+    #     self.flyer.integrate_translation(plane[0], plane[1])         
  
 #*******************************************************************
 # START
-if __name__ == "__main__":
-    anim_simUI = AnimSim()
+#if __name__ == "__main__":
+anim_simUI = AnimSim()
 

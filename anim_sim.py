@@ -89,6 +89,10 @@ class Flyer:
 
     def create_world_space_buffer(self):
         print('|create_world_space_buffer|')
+        print('Fidelity is:')
+        print(self.fidelity)
+        print('Auto Roll is:')
+        print(self.auto_roll)
         buffer_raw = self.name + '_buffer_raw'
 
         pm.createNode('transform', n = buffer_raw, ss = True)
@@ -124,6 +128,8 @@ class Flyer:
         """
 
         print('|derive_rotation|')
+        h.extract_anim(self.name, 'rotation')
+        h.extract_anim(self.name, 'translation')
         self.get_scene_data()
         raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
@@ -148,14 +154,15 @@ class Flyer:
             None
         """
 
-        print('|integrate_translation|') 
+        print('|integrate_translation|')
+        cmds.animLayer(self.name + '_original_translation', edit=True, mute=True)
         # Get the local starting position
         self.start_pos_axis_1 = cmds.getAttr(self.name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
         self.start_pos_axis_2 = cmds.getAttr(self.name + '.translate' + axis_2, time=self.start_frame - self.fidelity)
         self.pos_axis_1 = h.get_integral(self.rot_axis_1, 2)
         self.pos_axis_2 = h.get_integral(self.rot_axis_2, 2)
         self.copy_to_translation(self.scale, axis_1, axis_2)
-)
+
 
 #*******************************************************************************
 # APPLY
