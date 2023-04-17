@@ -163,7 +163,7 @@ class Flyer:
         self.pos_axis_2 = h.get_integral(self.rot_axis_2, 2)
         self.copy_to_translation(self.scale, axis_1, axis_2)
 
-    def extract_anim(object, transform):
+    def extract_anim(self, object, transform):
         """ Extracts base anim to new layer and groups with additional anim layers.
 
         Args:
