@@ -128,8 +128,7 @@ class Flyer:
         """
 
         print('|derive_rotation|')
-        h.extract_anim(self.name, 'rotation')
-        h.extract_anim(self.name, 'translation')
+
         self.get_scene_data()
         raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
@@ -155,6 +154,8 @@ class Flyer:
         """
 
         print('|integrate_translation|')
+        cmds.animLayer('BaseAnimation', edit=True, sel=True, prf=True))
+        h.extract_anim(self.name, 'translation')
         cmds.animLayer(self.name + '_original_translation', edit=True, mute=True)
         # Get the local starting position
         self.start_pos_axis_1 = cmds.getAttr(self.name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
@@ -185,6 +186,10 @@ class Flyer:
         axis2_mult = 1
         h.create_anim_layer(self.name, self.rot_layer_name)
         cmds.animLayer(self.rot_layer_name, edit=True, sel=True, prf=True)
+        if cmds.animLayer(self.rot_layer_name, query=True, sel=True):
+            print(self.rot_layer_name + ' is the current layer')
+        else:
+            print(self.rot_layer_name + ' is NOT the current layer')
         if axis_1 == 'X' and axis_2 == 'Y':
             print('X and Y are true')
             axis_1 = 'Z'

@@ -28,8 +28,8 @@ class AnimSim:
         
         # ICONS
         self.wgAnimSim.setWindowIcon(QtGui.QPixmap(IMG_PATH.format("helicopter-icon-21952")))
-        self.wgAnimSim.lblRotDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
-        self.wgAnimSim.lblTransDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
+        #self.wgAnimSim.lblRotDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
+        #self.wgAnimSim.lblTransDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
 
         #***********************************************************************
         # SIGNAL
