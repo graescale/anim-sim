@@ -128,7 +128,7 @@ class Flyer:
         """
 
         print('|derive_rotation|')
-
+        extract_anim(self.name, 'translation')
         self.get_scene_data()
         raw_anim_data = self.get_anim_data(['translate' + axis_1, 'translate' + axis_2])
         self.raw_pos_axis_1 = raw_anim_data['translate' + axis_1]
@@ -154,7 +154,7 @@ class Flyer:
         """
 
         print('|integrate_translation|')
-        h.extract_anim(self.name, 'translation')
+        
         cmds.animLayer(self.name + '_original_translation', edit=True, mute=True)
         # Get the local starting position
         self.start_pos_axis_1 = cmds.getAttr(self.name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
@@ -162,6 +162,58 @@ class Flyer:
         self.pos_axis_1 = h.get_integral(self.rot_axis_1, 2)
         self.pos_axis_2 = h.get_integral(self.rot_axis_2, 2)
         self.copy_to_translation(self.scale, axis_1, axis_2)
+
+def extract_anim(object, transform):
+    """ Extracts base anim to new layer and groups with additional anim layers.
+
+    Args:
+        object (obj): The object with animation curves to extract
+        transform (str): The transformation type (rotation or translation)
+
+    """
+
+    print('|extract_anim|')
+    additional_layers = []
+    BASE_ANIM_LAYER = 'BaseAnimation'
+    ORIGINAL_LAYER_GROUP = 'Original_Animation'
+    EXTRACT_LAYER = object + transform
+
+    if transform == "rotation":
+        attrs = ['rx', 'ry', 'rz']
+    if transform == "translation":
+        attrs = ['tx', 'ty', 'tz']
+    
+    # Get a list of selected layers
+    anim_layers = cmds.ls(type='animLayer')
+    for layer in anim_layers:
+        if cmds.animLayer(layer, sel=True, query=True)
+        additional_layers.append(layer)
+
+    if not cmds.animLayer(EXTRACT_LAYER, query=True, exists=True):
+        cmds.animLayer(EXTRACT_LAYER)
+    for layer in anim_layers:
+        cmds.animLayer(layer, edit=True, sel=False, prf=False)
+    cmds.animLayer(BASE_ANIM_LAYER, edit=True, sel=True, prf=True)
+    cmds.copyKey(object, animation='objects', option='keys')
+    cmds.animLayer(EXTRACT_LAYER, edit=True, sel=True, prf=True)
+    cmds.animLayer(EXTRACT_LAYER, edit=True, addSelectedObjects=True)
+    cmds.pasteKey(object, animation='objects', option='replaceCompletely')
+    cmds.animLayer(BASE_ANIM_LAYER, edit=True, sel=True, prf=True)
+    cmds.animLayer(EXTRACT_LAYER, edit=True, sel=False, prf=False)
+    cmds.keyframe(object, at=attrs, edit=True, time=(None,None), absolute=True, valueChange=0)
+    cmds.cutKey(object, animation='objects', option='keys')
+    #cmds.animLayer(EXTRACT_LAYER, edit=True, moveLayerBefore=self.rot_layer_name)
+
+    # Parent the base animation and additional layers
+    cmds.animLayer(ORIGINAL_LAYER_GROUP)
+    cmds.animLayer(EXTRACT_LAYER, edit=True, parent=ORIGINAL_LAYER_GROUP)
+    for layer in additional_layers:
+        cmds.animLayer(layer, edit=True, parent=ORIGINAL_LAYER_GROUP)
+
+    #def anchor(self):
+        # Get the anchor times
+        # Turn off auto_translation and turn on _original_translation
+
 
 
 #*******************************************************************************
