@@ -21,8 +21,8 @@ import maya.cmds as cmds
 #*******************************************************************************
 # VARIABLES
 
-ROTATION_LAYER = 'auto_rotation_layer'
-TRANSLATION_LAYER = 'auto_translation_layer'
+ROTATION_LAYER = 'auto_rotation'
+TRANSLATION_LAYER = 'auto_translation'
 
 TITLE = os.path.splitext(os.path.basename(__file__))[0]
 CURRENT_PATH = os.path.dirname(__file__)
@@ -154,7 +154,6 @@ class Flyer:
         """
 
         print('|integrate_translation|')
-        cmds.animLayer('BaseAnimation', edit=True, sel=True, prf=True))
         h.extract_anim(self.name, 'translation')
         cmds.animLayer(self.name + '_original_translation', edit=True, mute=True)
         # Get the local starting position

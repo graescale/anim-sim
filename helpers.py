@@ -125,6 +125,9 @@ def extract_anim(object, transform):
         attrs = ['tx', 'ty', 'tz']
     if not cmds.animLayer(EXTRACT_LAYER, query=True, exists=True):
         cmds.animLayer(EXTRACT_LAYER)
+    for layer in cmds.ls(type='animLayer'):
+        cmds.animLayer(layer, edit=True, sel=False, prf=False)
+    cmds.animLayer(BASE_ANIM_LAYER, edit=True, sel=True, prf=True)
     cmds.copyKey(object, animation='objects', option='keys')
     cmds.animLayer(EXTRACT_LAYER, edit=True, sel=True, prf=True)
     cmds.animLayer(EXTRACT_LAYER, edit=True, addSelectedObjects=True)
@@ -133,6 +136,7 @@ def extract_anim(object, transform):
     cmds.animLayer(EXTRACT_LAYER, edit=True, sel=False, prf=False)
     cmds.keyframe(object, at=attrs, edit=True, time=(None,None), absolute=True, valueChange=0)
     cmds.cutKey(object, animation='objects', option='keys')
+    cmds.animLayer(EXTRACT_LAYER, edit=True, moveLayerBefore='auto_rotation')
 
     
     
