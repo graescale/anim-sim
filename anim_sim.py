@@ -186,7 +186,7 @@ def extract_anim(object, transform):
     # Get a list of selected layers
     anim_layers = cmds.ls(type='animLayer')
     for layer in anim_layers:
-        if cmds.animLayer(layer, sel=True, query=True)
+        if cmds.animLayer(layer, sel=True, query=True):
         additional_layers.append(layer)
 
     if not cmds.animLayer(EXTRACT_LAYER, query=True, exists=True):
