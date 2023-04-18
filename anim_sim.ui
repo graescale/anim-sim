@@ -686,7 +686,7 @@ color: rgb(33, 32, 35);</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnRemoveAll">
+          <widget class="QPushButton" name="btnRemoveAllAnchor">
            <property name="maximumSize">
             <size>
              <width>150</width>

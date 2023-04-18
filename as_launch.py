@@ -44,8 +44,8 @@ class AnimSim:
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
         # ANCHORS
-        self.wgAnimSim.btnAddRemove.clicked.connect(self.press_btnAddRemove)
-        self.wgAnimSim.btnRemoveAll.clicked.connect(self.press_btnRemoveAll)
+        self.wgAnimSim.btnAddRemoveAnchor.clicked.connect(self.press_btnAddRemoveAnchor)
+        self.wgAnimSim.btnRemoveAllAnchor.clicked.connect(self.press_btnRemoveAllAnchor)
 
         # SIM
         self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
@@ -82,10 +82,10 @@ class AnimSim:
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
-    def press_btnAddRemove(self):
+    def press_btnAddRemoveAnchor(self):
         self.flyer.set_anchor(plane[0], plane[1])
 
-    def press_btnRemoveAll(self):
+    def press_btnRemoveAllAnchor(self):
         self.flyer.remove_anchors()
 
     def press_btnBuild(self):
