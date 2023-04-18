@@ -43,6 +43,10 @@ class AnimSim:
         self.wgAnimSim.sldScale.valueChanged.connect(self.press_sldScale)
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
+        # ANCHORS
+        self.wgAnimSim.btnAddRemove.clicked.connect(self.press_btnAddRemove)
+        self.wgAnimSim.btnRemoveAll.clicked.connect(self.press_btnRemoveAll)
+
         # SIM
         self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
         #self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)

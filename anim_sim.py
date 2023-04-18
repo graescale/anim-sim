@@ -213,6 +213,7 @@ class Flyer:
 
     def set_anchor(self, axis_1, axis_2):
 
+        print('|set_anchor|')
         display_layer = self.name + '_anchors'
         # Get the current time
         current_time = cmds.currentTime(query=True)
