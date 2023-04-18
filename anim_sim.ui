@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>870</height>
+    <height>904</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -596,6 +596,109 @@ color: rgb(33, 32, 35);</string>
            </property>
            <property name="checked">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="verticalWidget" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 47, 62);</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <widget class="QLabel" name="label_15">
+        <property name="styleSheet">
+         <string notr="true">font: 18pt &quot;Roboto&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Anchors</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="horizontalWidget_2" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(87, 101, 116);</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_17">
+           <property name="styleSheet">
+            <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Add or Remove Anchor at current frame</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnAddRemoveAnchor">
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+           </property>
+           <property name="text">
+            <string>Add/Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="horizontalWidget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(87, 101, 116);</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_16">
+           <property name="styleSheet">
+            <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Remove all Anchors</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnRemoveAll">
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+           </property>
+           <property name="text">
+            <string>Remove All</string>
            </property>
           </widget>
          </item>

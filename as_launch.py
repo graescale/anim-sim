@@ -78,6 +78,12 @@ class AnimSim:
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
+    def press_btnAddRemove(self):
+        self.flyer.set_anchor(plane[0], plane[1])
+
+    def press_btnRemoveAll(self):
+        self.flyer.remove_anchors()
+
     def press_btnBuild(self):
         plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
         self.flyer.scale = self.wgAnimSim.sldScale.value()
