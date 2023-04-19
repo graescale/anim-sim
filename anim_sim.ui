@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>904</height>
+    <height>1000</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -607,6 +607,55 @@ color: rgb(33, 32, 35);</string>
    </item>
    <item>
     <widget class="QWidget" name="verticalWidget" native="true">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 47, 62);</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_15">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true">font: 18pt &quot;Roboto&quot;;</string>
+        </property>
+        <property name="text">
+         <string>Sim</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_16">
+        <item>
+         <widget class="QWidget" name="horizontalWidget" native="true">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(87, 101, 116);</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="btnBuild">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+             </property>
+             <property name="text">
+              <string>Build</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="verticalWidget" native="true">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(34, 47, 62);</string>
      </property>
@@ -705,54 +754,25 @@ color: rgb(33, 32, 35);</string>
         </layout>
        </widget>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QWidget" name="verticalWidget" native="true">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>100</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(34, 47, 62);</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_15">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QWidget" name="horizontalWidget" native="true">
         <property name="styleSheet">
-         <string notr="true">font: 18pt &quot;Roboto&quot;;</string>
+         <string notr="true">background-color: rgb(87, 101, 116);</string>
         </property>
-        <property name="text">
-         <string>Sim</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_16">
-        <item>
-         <widget class="QWidget" name="horizontalWidget" native="true">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(87, 101, 116);</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QPushButton" name="btnBuild">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(200, 214, 229);
+        <layout class="QHBoxLayout" name="horizontalLayout_13">
+         <item>
+          <widget class="QPushButton" name="btnRebuild">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(200, 214, 229);
 color: rgb(33, 32, 35);</string>
-             </property>
-             <property name="text">
-              <string>Build</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+           </property>
+           <property name="text">
+            <string>Rebuild</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

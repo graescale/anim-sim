@@ -46,6 +46,7 @@ class AnimSim:
         # ANCHORS
         self.wgAnimSim.btnAddRemoveAnchor.clicked.connect(self.press_btnAddRemoveAnchor)
         self.wgAnimSim.btnRemoveAllAnchor.clicked.connect(self.press_btnRemoveAllAnchor)
+        self.wgAnimSim.btnRebuild.clicked.connect(self.press_btnRebuild)
 
         # SIM
         self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
@@ -83,6 +84,7 @@ class AnimSim:
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
     def press_btnAddRemoveAnchor(self):
+        plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
         self.flyer.set_anchor(plane[0], plane[1])
 
     def press_btnRemoveAllAnchor(self):
@@ -99,6 +101,10 @@ class AnimSim:
         else:
             self.flyer.derive_rotation(plane[0], plane[1], 3)
             self.flyer.integrate_translation(plane[0], plane[1])
+    
+    def press_btnRebuild(self):
+        plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
+        self.flyers.anchors_rebuild((plane[0], plane[1])
 
     # def press_btnRotation(self):
     #     plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
