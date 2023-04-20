@@ -105,8 +105,4 @@ def create_anim_layer(object, layer_name):
     cmds.select(object)
     cmds.animLayer(layer_name, edit=True, addSelectedObjects=True)
 
-
-
-
-    
     

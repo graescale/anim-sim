@@ -606,6 +606,67 @@ color: rgb(33, 32, 35);</string>
     </widget>
    </item>
    <item>
+    <widget class="QWidget" name="widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 47, 62);</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_13">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <widget class="QListWidget" name="wgConnections">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(87, 101, 116);</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>Item A</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Item B</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Item C</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <item>
+           <widget class="QPushButton" name="btnAddItem">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+            </property>
+            <property name="text">
+             <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnRemoveItem">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+            </property>
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="verticalWidget" native="true">
      <property name="maximumSize">
       <size>
