@@ -18,9 +18,7 @@ from anim_sim import *
 # UI
 class AnimSim:
     def __init__(self):
-        #self.scale = None
-        #self.fidelity  = None
-        #self.autoPrePost = 1
+
         self.flyer = None
         
         path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
@@ -28,23 +26,25 @@ class AnimSim:
         
         # ICONS
         self.wgAnimSim.setWindowIcon(QtGui.QPixmap(IMG_PATH.format("helicopter-icon-21952")))
-        #self.wgAnimSim.lblRotDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
-        #self.wgAnimSim.lblTransDownArrow.setPixmap(QtGui.QPixmap(IMG_PATH.format("double_down_arrow_icon")))
-
+ 
         #***********************************************************************
         # SIGNAL
         
         # SELECT
         self.wgAnimSim.btnTarget.clicked.connect(self.press_btnTarget)
         self.wgAnimSim.btnParent.clicked.connect(self.press_btnParent)
+
+        # PAGE SELECT
+        self.wgAnimSim.btnBuildPage.clicked.connect(self.press_btnBuildPage)
         
         # PARAMETERS
-        #self.wgAnimSim.cbxMotionPlane.currentIndexChanged.connect(self.press_cbxMotionPlane)
+
         self.wgAnimSim.sldScale.valueChanged.connect(self.press_sldScale)
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
         # CONNECTIONS
-        self.wgAnimSim.wgConnections.currentTextChanged.connect(self.)
+        self.wgAnimSim.wgConnections.currentTextChanged.connect(self.press_wgConncetions)
+        self.wgAnimSim.btnAddItem.clicked.connect(self.press_btn_AddItem)
 
         # ANCHORS
         self.wgAnimSim.btnAddRemoveAnchor.clicked.connect(self.press_btnAddRemoveAnchor)
@@ -53,21 +53,30 @@ class AnimSim:
 
         # SIM
         self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
-        #self.wgAnimSim.btnRotation.clicked.connect(self.press_btnRotation)
-        #self.wgAnimSim.btnTranslation.clicked.connect(self.press_btnTranslation)
+
         
         self.wgAnimSim.show()
 
     #***************************************************************************
     # PRESS
 
+    def press_btnBuildPage(self):
+        self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgBuild)
+
+    def press_btnAnchorPage(self):
+        self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgAnchor)
+
+    def press_btnConnectPage(self):
+        self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgConnect)        
+
     def press_btnTarget(self):
         if len(cmds.ls(sl=True)) == 1:
             target = cmds.ls( sl=True )[0]
             self.flyer = Flyer(target)
-            self.wgAnimSim.lblCurrentTarget.setText(target)
-        else:
-            self.wgAnimSim.lblCurrentTarget.setText("Please choose a single object.") 
+            self.wgAnimSim.cbxName.setItemText(target)
+            #self.wgAnimSim.lblCurrentTarget.setText(target)
+        #else:
+        #    self.wgAnimSim.lblCurrentTarget.setText("Please choose a single object.") 
 
     def press_btnParent(self):
         if len(cmds.ls(sl=True)) == 1:
@@ -77,17 +86,22 @@ class AnimSim:
         else:
             self.wgAnimSim.lblCurrentParent.setText("Please choose a single object.")
 
-    #def press_cbxMotionPlane(self):
-    #    self.wgAnimSim.lblCurrentTarget.setText("cbxMotionPlane changed")
-
     def press_sldScale(self):
         self.wgAnimSim.lblScale.setText(str(self.wgAnimSim.sldScale.value()))
 
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
-    def press_wgConncetions(sefl):
-        self.wgAnimSim.lblCurrentItem.setText(str(self.wg.AnimSim.wgConnections.currentItem()))
+    def press_wgConncetions(self):
+        self.wgAnimSim.lblCurrentItem.setText(str(self.wgAnimSim.wgConnections.currentItem().text()))
+
+    def press_btn_AddItem(self):
+        if len(cmds.ls(sl=True)) >= 1:
+            sel_objects = cmds.ls(sl=True)
+        print('sel_objects is:')
+        print(sel_objects)
+        #for obj in sel_objects:
+        self.wgAnimSim.wgConnections.addItems(sel_objects)
 
     def press_btnAddRemoveAnchor(self):
         plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
