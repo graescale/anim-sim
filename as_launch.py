@@ -35,7 +35,9 @@ class AnimSim:
         self.wgAnimSim.btnParent.clicked.connect(self.press_btnParent)
 
         # PAGE SELECT
-        self.wgAnimSim.btnBuildPage.clicked.connect(self.press_btnBuildPage)
+        self.wgAnimSim.btnPgBuild.clicked.connect(self.press_btnPgBuild)
+        self.wgAnimSim.btnPgAnchor.clicked.connect(self.press_btnPgAnchor)
+        self.wgAnimSim.btnPgConnect.clicked.connect(self.press_btnPgConnect)
         
         # PARAMETERS
 
@@ -43,7 +45,7 @@ class AnimSim:
         self.wgAnimSim.sldFidelity.valueChanged.connect(self.press_sldFidelity)
 
         # CONNECTIONS
-        self.wgAnimSim.wgConnections.currentTextChanged.connect(self.press_wgConncetions)
+        #self.wgAnimSim.wgConnectInputs.currentTextChanged.connect(self.wgConnections)
         self.wgAnimSim.btnAddItem.clicked.connect(self.press_btn_AddItem)
 
         # ANCHORS
@@ -60,20 +62,29 @@ class AnimSim:
     #***************************************************************************
     # PRESS
 
-    def press_btnBuildPage(self):
+    def update_selections():
+        objects = cmds.listRelatives(TARGETS, children=True, fullPath=True)
+        #clear the combo list
+        self.wgAnimSim.cbxName.clear()
+        self.wgAnimSim.cbxName.addItems(objects)
+        #add objects to the combo list
+
+    def press_btnPgBuild(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgBuild)
 
-    def press_btnAnchorPage(self):
+    def press_btnPgAnchor(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgAnchor)
 
-    def press_btnConnectPage(self):
+    def press_btnPgConnect(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgConnect)        
 
     def press_btnTarget(self):
         if len(cmds.ls(sl=True)) == 1:
             target = cmds.ls( sl=True )[0]
             self.flyer = Flyer(target)
-            self.wgAnimSim.cbxName.setItemText(target)
+            self.flyer.create_hierarchy()
+            self.flyer.create_dag(target, TARGETS)
+            #self.wgAnimSim.cbxName.addItem(target)
             #self.wgAnimSim.lblCurrentTarget.setText(target)
         #else:
         #    self.wgAnimSim.lblCurrentTarget.setText("Please choose a single object.") 
@@ -82,7 +93,7 @@ class AnimSim:
         if len(cmds.ls(sl=True)) == 1:
             parent = cmds.ls(sl=True)[0]
             self.flyer.parent = parent
-            self.wgAnimSim.lblCurrentParent.setText(parent)  
+            self.wgAnimSim.lblCurrentParent.setText(parent)
         else:
             self.wgAnimSim.lblCurrentParent.setText("Please choose a single object.")
 
@@ -92,8 +103,8 @@ class AnimSim:
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
-    def press_wgConncetions(self):
-        self.wgAnimSim.lblCurrentItem.setText(str(self.wgAnimSim.wgConnections.currentItem().text()))
+    #def wgConnections(self):
+        #self.wgAnimSim.lblCurrentItem.setText(str(self.wgAnimSim.wgConnectInputs.currentItem().text()))
 
     def press_btn_AddItem(self):
         if len(cmds.ls(sl=True)) >= 1:

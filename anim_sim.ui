@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
+    <width>576</width>
     <height>693</height>
    </rect>
   </property>
@@ -225,21 +225,21 @@ color: rgb(33, 32, 35);</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QPushButton" name="btnBuildPage">
+         <widget class="QPushButton" name="btnPgBuild">
           <property name="text">
            <string>BUILD</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnAnchorPage">
+         <widget class="QPushButton" name="btnPgAnchor">
           <property name="text">
            <string>ANCHOR</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="btnPgConnect">
           <property name="text">
            <string>CONNECT</string>
           </property>
@@ -253,7 +253,7 @@ color: rgb(33, 32, 35);</string>
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="pgBuild">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -805,7 +805,7 @@ font: Roboto</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QListWidget" name="wgInputList">
+                 <widget class="QListWidget" name="wgConnectInputs">
                   <property name="styleSheet">
                    <string notr="true">background-color: rgb(87, 101, 116);</string>
                   </property>

@@ -26,6 +26,10 @@ TRANSLATION_LAYER = 'auto_translation'
 BASE_ANIM_LAYER = 'BaseAnimation'
 ORIGINAL_LAYER_GROUP = 'Original_Animation'
 
+ROOT = 'Anim_Sim'
+TARGETS = 'Targets'
+ANCHORS = 'Anchors'
+CONNECTIONS = 'Connections'
 
 TITLE = os.path.splitext(os.path.basename(__file__))[0]
 CURRENT_PATH = os.path.dirname(__file__)
@@ -123,6 +127,37 @@ class Flyer:
        
 #*******************************************************************************
 # PROCESS
+
+    def create_hierarchy();
+        """ Creates initial folder structre
+        
+        Returns:
+            None
+        """
+
+        if not cmds.objExists(ROOT):
+            cmds.group(empty=True, name=ROOT)
+        if not cmds.objExists(ANCHORS):
+            cmds.group(empty=True, name=ANCHORS, parent=ROOT)
+        if not cmds.objExists(TARGETS):
+            cmds.group(empty=True, name=TARGETS, parent=ROOT)
+        if not cmds.objExists(CONNECTIONS):
+            cmds.group(empty=True, name=CONNECTIONS, parent=ROOT)
+
+    def create_dag(object, parent_node):
+        """ Derives object's rotation from its translation.
+
+        Args:
+            object (str): target object
+            parent (str): object to become target's parent 
+
+        Returns:
+            None
+            """
+
+        if not cmds.objExists(object):
+            cmds.createNode('dagContainer', n=object, parent=parent_node )
+
     def derive_rotation(self, axis_1, axis_2, polyOrder=3 ):
         """ Derives object's rotation from its translation.
         

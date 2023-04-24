@@ -95,8 +95,6 @@ def create_anim_layer(object, layer_name):
     
     Args:
         layer_name (str): The name of layer to be created
-
-
     """
 
     print('|create_anim_layer|')
@@ -104,5 +102,3 @@ def create_anim_layer(object, layer_name):
         cmds.animLayer(layer_name)
     cmds.select(object)
     cmds.animLayer(layer_name, edit=True, addSelectedObjects=True)
-
-    
