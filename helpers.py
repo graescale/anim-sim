@@ -13,6 +13,29 @@ import numpy as np
 import scipy.signal
 import maya.cmds as cmds
 
+def create_dag(object, parent_node):
+    """ Creates a dag node.
+
+    Args:
+        object (str): target object
+        parent (str): object to become target's parent 
+        suffix (str): string to append to object
+
+    Returns:
+        None
+        """
+
+    if not cmds.objExists(object):
+        cmds.createNode('dagContainer', n=object, parent=parent_node)
+        print('Created DAG node:')
+        print(object)
+    else:
+        print('Node already exists:')
+        print(dag_name)
+
+def add_attrs(object, name, type):
+    cmds.addAttr(object, longname=name, dataType=type)
+
 def get_derivative(anim_data, degree, filter_data, window, order=3):
     """ Returns a list containing n degree derivative of supplied list.
     

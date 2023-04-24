@@ -144,20 +144,6 @@ class Flyer:
         if not cmds.objExists(CONNECTIONS):
             cmds.group(empty=True, name=CONNECTIONS, parent=ROOT)
 
-    def create_dag(self, object, parent_node):
-        """ Derives object's rotation from its translation.
-
-        Args:
-            object (str): target object
-            parent (str): object to become target's parent 
-
-        Returns:
-            None
-            """
-
-        if not cmds.objExists(object):
-            cmds.createNode('dagContainer', n=object, parent=parent_node )
-
     def derive_rotation(self, axis_1, axis_2, polyOrder=3 ):
         """ Derives object's rotation from its translation.
         

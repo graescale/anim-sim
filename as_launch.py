@@ -21,6 +21,15 @@ class AnimSim:
 
         self.flyer = None
         
+        ATTRIBUTES = {
+            'name': 'string'
+            'parent': 'string'
+            'motionPlane': 'stringArray'
+            'fidelity': 'short'
+            'scale': 'long'
+            'prepost': 'boolean'
+        }
+
         path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
         self.wgAnimSim = QtCompat.loadUi(path_ui)
         
@@ -64,10 +73,10 @@ class AnimSim:
 
     def update_selections(self):
         objects = cmds.listRelatives(TARGETS, children=True, fullPath=True)
-        #clear the combo list
         self.wgAnimSim.cbxName.clear()
-        self.wgAnimSim.cbxName.addItems(objects)
-        #add objects to the combo list
+        for target in cmds.listRelatives('Targets'):
+            self.wgAnimSim.cbxName.addItem(target + '.name')
+        #self.wgAnimSim.cbxName.addItems(objects)
 
     def press_btnPgBuild(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgBuild)
@@ -83,11 +92,16 @@ class AnimSim:
             target = cmds.ls( sl=True )[0]
             self.flyer = Flyer(target)
             self.flyer.create_hierarchy()
-            self.flyer.create_dag(target, TARGETS)
+            target_name = object + '_target'
+            h.create_dag(target, TARGETS)
+            for key in ATTRIBUTES:
+                h.add_attrs(target_name, key, ATTRIBUTES[key])
+                cmds.setAttr(target_name + '.name', object )
+            self.update_selections()
             #self.wgAnimSim.cbxName.addItem(target)
             #self.wgAnimSim.lblCurrentTarget.setText(target)
-        #else:
-        #    self.wgAnimSim.lblCurrentTarget.setText("Please choose a single object.") 
+        else:
+            self.wgAnimSim.lblStatus.setText("Please choose a single object.") 
 
     def press_btnParent(self):
         if len(cmds.ls(sl=True)) == 1:
