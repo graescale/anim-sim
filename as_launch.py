@@ -62,7 +62,7 @@ class AnimSim:
     #***************************************************************************
     # PRESS
 
-    def update_selections():
+    def update_selections(self):
         objects = cmds.listRelatives(TARGETS, children=True, fullPath=True)
         #clear the combo list
         self.wgAnimSim.cbxName.clear()

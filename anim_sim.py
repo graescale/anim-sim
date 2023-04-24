@@ -128,7 +128,7 @@ class Flyer:
 #*******************************************************************************
 # PROCESS
 
-    def create_hierarchy();
+    def create_hierarchy(self):
         """ Creates initial folder structre
         
         Returns:
@@ -144,7 +144,7 @@ class Flyer:
         if not cmds.objExists(CONNECTIONS):
             cmds.group(empty=True, name=CONNECTIONS, parent=ROOT)
 
-    def create_dag(object, parent_node):
+    def create_dag(self, object, parent_node):
         """ Derives object's rotation from its translation.
 
         Args:
