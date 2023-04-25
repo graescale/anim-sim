@@ -66,6 +66,7 @@ class Flyer:
         self.parent = None
         self.anchors = []
         self.anchor_display_layer = None
+        self.motion_plane = ''
         
 
 

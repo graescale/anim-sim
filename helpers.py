@@ -13,6 +13,24 @@ import numpy as np
 import scipy.signal
 import maya.cmds as cmds
 
+def write_parameters(target):
+    """ Writes parameters to target attributes
+
+    Args:
+        None
+
+    Returns:
+        None
+        """
+    attrs = cmds.attributeQuery('AnimSim', node=self.flyer.name, lc=True)
+    for attr in attrs:
+        attr_path = target + '.' + attr
+        attr_value = self.flyer + '.' attr
+        attr_type = cmds.attributeQuery(attr, node=self.flyer.name, attributeType=True)
+        cmds.setAttr(attr_path, attr_value, attr_type)
+
+#def read_parameters():
+
 def create_dag(object, parent_node):
     """ Creates a dag node.
 
@@ -27,14 +45,17 @@ def create_dag(object, parent_node):
 
     if not cmds.objExists(object):
         cmds.createNode('dagContainer', n=object, parent=parent_node)
-        print('Created DAG node:')
+        print('Created dag node:')
         print(object)
     else:
         print('Node already exists:')
-        print(dag_name)
+        print(object)
 
-def add_attrs(object, name, type):
-    cmds.addAttr(object, longname=name, dataType=type)
+def add_attrs(object, name, type, typeType, parent_attr):
+    if typeType == 'attributeType':
+        cmds.addAttr(object, longName=name, attributeType=type, parent=parent_attr)
+    else:
+        cmds.addAttr(object, longName=name, dataType=type, parent=parent_attr)
 
 def get_derivative(anim_data, degree, filter_data, window, order=3):
     """ Returns a list containing n degree derivative of supplied list.
