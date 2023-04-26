@@ -17,17 +17,7 @@ from anim_sim import *
 
 #*******************************************************************************
 # VARIABLES
-
-PARAMS = [
-    {'Name': ['string', 'dt', self.flyer.Name]},
-    {'parent': ['string', 'dt', self.flyer.parent]},
-    {'motion_plane': ['string', 'dt', self.motion_plane]},
-    {'fidelity': ['short', 'at', self.flyer.fidelity]},
-    {'Scale': ['long', 'at', self.flyer.Scale]},
-    {'auto_roll': ['bool', 'at', self.auto_roll]}
-]
-
-
+TARGETS = 'Targets'
 ROOT_NAME = 'AnimSim'
 ROOT_TYPE = 'compound'
 NUM_CHILDREN = 6
@@ -47,6 +37,8 @@ class AnimSim:
     def __init__(self):
 
         self.flyer = None
+        self.target = ''
+        self.target_group = TARGETS
 
         path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
         self.wgAnimSim = QtCompat.loadUi(path_ui)
@@ -90,7 +82,7 @@ class AnimSim:
     # PRESS
 
     def update_selections(self):
-        objects = cmds.listRelatives(TARGETS, children=True, fullPath=True)
+        objects = cmds.listRelatives('Targets', children=True, fullPath=True)
         print('objects are:')
         print(objects)
         self.wgAnimSim.cbxName.clear()
@@ -110,13 +102,16 @@ class AnimSim:
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgConnect)        
 
     def press_btnTarget(self):
-        target = cmds.ls(sl=True)[0]
-        if cmds.objExists(target):
+        sel = cmds.ls(sl=True)[0]
+        if cmds.objExists(sel + '_target'):
             self.wgAnimSim.lblStatus.setText("Target already exists.")
         elif len(cmds.ls(sl=True)) == 1:
-            self.flyer = Flyer(target)
-            self.flyer.create_hierarchy()
+            self.flyer = Flyer(sel)
+            self.target = self.flyer.Name + '_target'
+            h.create_hierarchy()
+            h.create_dag(self.target, self.target_group)
             self.update_selections()
+            self.init_attributes()
         else:
             self.wgAnimSim.lblStatus.setText("Please choose a single object.") 
 
@@ -160,21 +155,29 @@ class AnimSim:
             self.wgAnimSim.lblStatus.setText('Fidelity value must be an odd number')
         else:
             target_name = self.flyer.Name + '_target'
-            h.create_dag(target_name, TARGETS)
-            cmds.addAttr(target_name, numberOfChildren=NUM_CHILDREN, longName=ROOT_NAME, attributeType=ROOT_TYPE)
-            self.add_attributes(target_name)
+
             self.flyer.derive_rotation(self.flyer.motion_plane[0], self.flyer.motion_plane[1], 3)
             self.flyer.integrate_translation(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
-            print(self.flyer.Name + '_target')
-            self.write_parameters(self.flyer.Name + '_target')
+            print(self.target)
+            self.write_parameters()
 
-    def add_attributes(self):
+    def init_attributes(self):
+
+        PARAMS = [
+            {'Name': ['string', 'dt', self.flyer.Name]},
+            {'parent': ['string', 'dt', self.flyer.parent]},
+            {'motion_plane': ['string', 'dt', self.flyer.motion_plane]},
+            {'fidelity': ['long', 'at', self.flyer.fidelity]},
+            {'Scale': ['long', 'at', self.flyer.Scale]},
+            {'auto_roll': ['bool', 'at', self.flyer.auto_roll]}
+        ]
+        cmds.addAttr(self.target, numberOfChildren=NUM_CHILDREN, longName=ROOT_NAME, attributeType=ROOT_TYPE)
         for dict in PARAMS:
             for key in dict:
-                if dict[key][1] = 'at':
-                    cmds.addAttr(target_name, longName=key, attributeType=dict[key][0], parent=ROOT_NAME)
-                if dict[key][1] = 'dt':
-                    cmds.addAttr(target_name, longName=key, dataType=dict[key][0], parent=ROOT_NAME)
+                if dict[key][1] == 'at':
+                    cmds.addAttr(self.target, longName=key, attributeType=dict[key][0], parent=ROOT_NAME)
+                if dict[key][1] == 'dt':
+                    cmds.addAttr(self.target, longName=key, dataType=dict[key][0], parent=ROOT_NAME)
 
     def press_btnRebuild(self):
         self.flyer.Scale = self.wgAnimSim.sldScale.value()
@@ -182,7 +185,7 @@ class AnimSim:
         self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()       
         self.flyer.anchor_rebuild(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
 
-    def write_parameters(self, target):
+    def write_parameters(self):
         """ Writes parameters to target attributes
 
         Args:
@@ -192,9 +195,16 @@ class AnimSim:
             None
             """
         print('|write_parameters')
+        cmds.setAttr(self.target + '.Name', self.flyer.Name, type='string')
+        if self.flyer.parent:
+            cmds.setAttr(self.target + '.parent', self.flyer.parent, type='string')
+        cmds.setAttr(self.target + '.motion_plane', self.flyer.motion_plane, type='string')
+        cmds.setAttr(self.target + '.fidelity', self.flyer.fidelity)
+        cmds.setAttr(self.target + '.Scale', self.flyer.Scale)
+        cmds.setAttr(self.target + '.auto_roll', self.flyer.auto_roll)
 
-        attr_type = cmds.attributeQuery(attr, node=target, attributeType=True)
-        cmds.setAttr(target + '.motion_plane', self.flyer.motion_plane, )
+        #attr_type = cmds.attributeQuery(attr, node=target, attributeType=True)
+        #cmds.setAttr(target + '.motion_plane', self.flyer.motion_plane, )
         # attrs = cmds.attributeQuery('AnimSim', node=target, lc=True)
         # for attr in attrs:
         #     attr_path = target + '.' + attr
