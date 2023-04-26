@@ -13,21 +13,29 @@ import numpy as np
 import scipy.signal
 import maya.cmds as cmds
 
-def write_parameters(target):
-    """ Writes parameters to target attributes
+#*******************************************************************************
+# VARIABLES
 
-    Args:
-        None
+ROOT = 'Anim_Sim'
+TARGETS = 'Targets'
+ANCHORS = 'Anchors'
+CONNECTIONS = 'Connections'
 
+def create_hierarchy():
+    """ Creates initial folder structre
+    
     Returns:
         None
-        """
-    attrs = cmds.attributeQuery('AnimSim', node=self.flyer.name, lc=True)
-    for attr in attrs:
-        attr_path = target + '.' + attr
-        attr_value = self.flyer + '.' attr
-        attr_type = cmds.attributeQuery(attr, node=self.flyer.name, attributeType=True)
-        cmds.setAttr(attr_path, attr_value, attr_type)
+    """
+
+    if not cmds.objExists(ROOT):
+        cmds.group(empty=True, name=ROOT)
+    if not cmds.objExists(ANCHORS):
+        cmds.group(empty=True, name=ANCHORS, parent=ROOT)
+    if not cmds.objExists(TARGETS):
+        cmds.group(empty=True, name=TARGETS, parent=ROOT)
+    if not cmds.objExists(CONNECTIONS):
+        cmds.group(empty=True, name=CONNECTIONS, parent=ROOT)
 
 #def read_parameters():
 
@@ -51,11 +59,11 @@ def create_dag(object, parent_node):
         print('Node already exists:')
         print(object)
 
-def add_attrs(object, name, type, typeType, parent_attr):
-    if typeType == 'attributeType':
-        cmds.addAttr(object, longName=name, attributeType=type, parent=parent_attr)
-    else:
-        cmds.addAttr(object, longName=name, dataType=type, parent=parent_attr)
+# def add_attrs(object, name, type, typeType, parent_attr):
+#     if typeType == 'attributeType':
+#         cmds.addAttr(object, longName=name, attributeType=type, parent=parent_attr)
+#     else:
+#         cmds.addAttr(object, longName=name, dataType=type, parent=parent_attr)
 
 def get_derivative(anim_data, degree, filter_data, window, order=3):
     """ Returns a list containing n degree derivative of supplied list.
