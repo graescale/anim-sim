@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>576</width>
-    <height>693</height>
+    <height>696</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -131,34 +131,11 @@ font: 12pt &quot;Roboto&quot;;</string>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbxName">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(200, 214, 229);
-color: rgb(33, 32, 35);</string>
-          </property>
-          <property name="currentText">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="widget_2" native="true">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Roboto</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
+         <widget class="QWidget" name="horizontalWidget_5" native="true">
           <property name="styleSheet">
            <string notr="true">background-color: rgb(87, 101, 116);</string>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
            <item>
             <widget class="QPushButton" name="btnTarget">
              <property name="minimumSize">
@@ -186,6 +163,38 @@ color: rgb(33, 32, 35);</string>
             </widget>
            </item>
            <item>
+            <widget class="QComboBox" name="cbxName">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(200, 214, 229);
+color: rgb(33, 32, 35);</string>
+             </property>
+             <property name="currentText">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget_2" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(87, 101, 116);</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
             <widget class="QPushButton" name="btnParent">
              <property name="minimumSize">
               <size>
@@ -208,6 +217,13 @@ color: rgb(33, 32, 35);</string>
              </property>
              <property name="text">
               <string>Set Parent</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblCurrentParent">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
