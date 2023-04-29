@@ -17,6 +17,7 @@ from anim_sim import *
 
 #*******************************************************************************
 # VARIABLES
+LAYER_NAME = 'Anim_Sim'
 TARGETS = 'Targets'
 ROOT_NAME = 'AnimSim'
 ROOT_TYPE = 'compound'
@@ -41,7 +42,6 @@ class AnimSim:
 
         path_ui = CURRENT_PATH + "/" + TITLE + ".ui"
         self.wgAnimSim = QtCompat.loadUi(path_ui)
-
 
         #***********************************************************************
         # ICONS
@@ -77,39 +77,42 @@ class AnimSim:
         # SIM
         self.wgAnimSim.btnBuild.clicked.connect(self.press_btnBuild)
 
-        
         self.wgAnimSim.show()
-
+        
         #***********************************************************************
         # INITIALIZE
+        h.create_hierarchy()
         self.update_selections()
         self.update_flyer_attrs()
-
+        
     #***************************************************************************
     # PRESS
-
     def press_btnPgBuild(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgBuild)
+
 
     def press_btnPgAnchor(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgAnchor)
 
+
     def press_btnPgConnect(self):
         self.wgAnimSim.stackedWidget.setCurrentWidget(self.wgAnimSim.pgConnect)        
 
+
     def press_btnTarget(self):
+        h.create_hierarchy()
         sel = cmds.ls(sl=True)[0]
         if cmds.objExists(sel + '_target'):
             self.wgAnimSim.lblStatus.setText("Target already exists.")
         elif len(cmds.ls(sl=True)) == 1:
             self.make_flyer(sel)
             self.target = self.flyer.Name + '_target'
-            h.create_hierarchy()
             h.create_dag(self.target, self.target_group)
             self.update_selections()
             self.create_attributes()
         else:
             self.wgAnimSim.lblStatus.setText("Please choose a single object.") 
+
 
     def press_btnParent(self):
         if len(cmds.ls(sl=True)) == 1:
@@ -119,14 +122,18 @@ class AnimSim:
         else:
             self.wgAnimSim.lblCurrentParent.setText("Please choose a single object.")
 
+
     def press_sldScale(self):
         self.wgAnimSim.lblScale.setText(str(self.wgAnimSim.sldScale.value()))
+
 
     def press_sldFidelity(self):
         self.wgAnimSim.lblFidelity.setText(str(self.wgAnimSim.sldFidelity.value()))
 
+
     #def wgConnections(self):
         #self.wgAnimSim.lblCurrentItem.setText(str(self.wgAnimSim.wgConnectInputs.currentItem().text()))
+
 
     def press_btn_AddItem(self):
         if len(cmds.ls(sl=True)) >= 1:
@@ -136,11 +143,14 @@ class AnimSim:
         #for obj in sel_objects:
         self.wgAnimSim.wgConnections.addItems(sel_objects)
 
+
     def press_btnAddRemoveAnchor(self):
         self.flyer.set_anchor(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
 
+
     def press_btnRemoveAllAnchor(self):
         self.flyer.remove_anchors()
+
 
     def press_btnBuild(self):
         self.update_flyer_attrs()
@@ -152,6 +162,7 @@ class AnimSim:
             self.flyer.integrate_translation(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
             self.write_parameters()
 
+
     def press_btnRebuild(self):
         self.flyer.Scale = self.wgAnimSim.sldScale.value()
         self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
@@ -159,9 +170,7 @@ class AnimSim:
         self.flyer.anchor_rebuild(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
 
     #***************************************************************************
-    # PROCESS
-
-    
+    # PROCESS   
     def make_flyer(self, dagObject):
         if not self.flyer:
             self.flyer = Flyer(dagObject)
@@ -170,30 +179,34 @@ class AnimSim:
         else:
             print('%s already exists.' % self.flyer.Name)
 
+
     def update_flyer_attrs(self):
         print('|update_flyer_attrs|')
         if self.wgAnimSim.cbxName.currentText():
-            current_sel = self.wgAnimSim.cbxName.currentText().split('_')[0]
-            print('current dropdown selection is:')
-            print(current_sel)
-            print('self.flyer is:')
-            print(self.flyer)
-            if self.flyer.Name != current_sel:
+            current_sel = self.wgAnimSim.cbxName.currentText()
+            if not self.flyer:
+                self.make_flyer(current_sel)
+            elif self.flyer.Name != current_sel:
                 print('self.flyer did not match current selection.')
                 self.make_flyer(current_sel)
+            self.target = self.flyer.Name + '_target'
             self.flyer.motion_plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
             self.flyer.Scale = self.wgAnimSim.sldScale.value()
             self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
             self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()
+            self.flyer.layer_name = self.flyer.Name + LAYER_NAME
+
         else:
             print('Selection box is empty. Nothing to update.')
+
 
     def cbxName_changed(self):
         objects = cmds.listRelatives(TARGETS, children=True, fullPath=False)
         if objects:
             self.read_parameters(self.wgAnimSim.cbxName.currentText())
-    
-    def read_parameters(self, target):
+
+
+    def read_parameters(self, selection):
         """ Reads target attributes and writes to self properties.
 
         Args:
@@ -208,6 +221,7 @@ class AnimSim:
             '[\'X\', \'Y\']': 1,
             '[\'Y\', \'Z\']': 2,
         }
+        target = selection + '_target'
         self.wgAnimSim.cbxMotionPlane.setCurrentIndex(motion_plane_list[cmds.getAttr(target + '.motionPlane')])
         if target + '.parent':
             self.wgAnimSim.lblCurrentParent.setText(cmds.getAttr(target + '.parent'))
@@ -228,7 +242,7 @@ class AnimSim:
             None
             """
 
-        print('|write_parameters')
+        print('|write_parameters|')
         cmds.setAttr(self.target + '.Name', self.flyer.Name, type='string')
         if self.flyer.parent:
             cmds.setAttr(self.target + '.parent', self.flyer.parent, type='string')
@@ -253,7 +267,7 @@ class AnimSim:
         self.wgAnimSim.cbxName.clear()
         if objects:
             for target in objects:
-                self.wgAnimSim.cbxName.addItem(target)
+                self.wgAnimSim.cbxName.addItem(target.split('_')[0])
                 count = self.wgAnimSim.cbxName.count()
                 self.wgAnimSim.cbxName.setCurrentIndex(count - 1)
 

@@ -37,8 +37,6 @@ def create_hierarchy():
     if not cmds.objExists(CONNECTIONS):
         cmds.group(empty=True, name=CONNECTIONS, parent=ROOT)
 
-#def read_parameters():
-
 def create_dag(object, parent_node):
     """ Creates a dag node.
 
@@ -142,7 +140,7 @@ def smooth_data(data, window, order):
     return scipy.signal.savgol_filter(data, window, order) 
 
 
-def create_anim_layer(object, layer_name):
+def create_anim_layer(object, layer_name, override):
     """ Creates an animation layer
     
     Args:
@@ -153,4 +151,4 @@ def create_anim_layer(object, layer_name):
     if not cmds.animLayer(layer_name, query=True, exists=True):
         cmds.animLayer(layer_name)
     cmds.select(object)
-    cmds.animLayer(layer_name, edit=True, addSelectedObjects=True)
+    cmds.animLayer(layer_name, edit=True, addSelectedObjects=True, o=override)
