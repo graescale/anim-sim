@@ -167,7 +167,7 @@ class AnimSim:
         self.flyer.Scale = self.wgAnimSim.sldScale.value()
         self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
         self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()       
-        self.flyer.anchor_rebuild(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
+        self.flyer.anchors_rebuild(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
 
     #***************************************************************************
     # PROCESS   

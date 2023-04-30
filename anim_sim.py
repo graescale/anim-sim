@@ -24,6 +24,8 @@ TITLE = os.path.splitext(os.path.basename(__file__))[0]
 CURRENT_PATH = os.path.dirname(__file__)
 IMG_PATH = CURRENT_PATH + "/img/{}.png"
 
+ANCHORS = 'Anchors'
+ANCHOR_LAYER = 'Anchor_Offset'
 
 #*******************************************************************************
 # CLASS
@@ -50,6 +52,7 @@ class Flyer:
         self.parent = None
         self.anchors = []
         self.anchor_display_layer = None
+        self.anchor_layer = ''
         self.motion_plane = ''
         
 
@@ -176,24 +179,16 @@ class Flyer:
         anchor_name = self.Name + '_' + str(current_time) + '_anchor'
         print('anchor_name is: ' + anchor_name)
         if anchor_name not in self.anchors:
-            #trans_values = [cmds.getAttr(self.name + '.translate' + axis_1), cmds.getAttr(self.name + '.translate' + axis_2)]
-            #self.anchors[current_time] = trans_values
             cmds.select(self.Name)
             anchor = cmds.duplicate(name=anchor_name)[0]
             self.anchors.append(anchor)
-            if not cmds.objExists('Anim_Sim'):
-                cmds.group(empty=True, name='Anim_Sim')
-            if not cmds.objExists('Anchors_GRP'):
-                cmds.group(empty=True, name='Anchors_GRP')
-                cmds.parent('Anchors_GRP', 'Anim_Sim')
-            cmds.parent(anchor, 'Anchors_GRP')
+            cmds.parent(anchor, ANCHORS)
             try:
                 cmds.editDisplayLayerMembers(self.anchor_display_layer, query=True)
             except:
                 cmds.createDisplayLayer(name=self.anchor_display_layer)
             cmds.editDisplayLayerMembers(self.anchor_display_layer, anchor, noRecurse=True)    
         else:
-            #self.anchors[current_time]
             cmds.delete(anchor_name)
             self.anchors.remove(anchor_name)
 
@@ -201,7 +196,7 @@ class Flyer:
     def remove_anchors(self):
 
         self.anchors = []
-        cmds.delete('Anchors_GRP')
+        cmds.delete(ANCHORS)
         cmds.delete(self.anchor_display_layer)
 
         # Get the anchor times
@@ -273,36 +268,34 @@ class Flyer:
             cmds.setKeyframe(self.Name, animLayer=self.layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] + self.start_pos_axis_1) )
             cmds.setKeyframe(self.Name, animLayer=self.layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] + self.start_pos_axis_2) )
 
-        
-    def anchors_rebuild(self, axis_1, axis_2):
 
+    def anchors_rebuild(self, axis_1, axis_2):
+        """ Creates offset layer to match animation to anchors and derives rotation.
+        
+        Args:
+            axis_1 (str): 1st rotation axis
+            axis_2 (str): 1st rotation axis
+        
+        Returns:
+            None
+        """
+        
         print('|anchors_rebuild|')
-        print('anchors are:')
-        print(self.anchors)
-        # Create temp offset layer
-        tmp_layer = 'tmp_layer'
+        self.anchor_layer = self.Name + ANCHOR_LAYER
         anim_layers = cmds.ls(type='animLayer')
-        cmds.animLayer(tmp_layer)
+        cmds.animLayer(self.anchor_layer)
         cmds.select(self.Name)
-        cmds.animLayer(tmp_layer, edit=True, addSelectedObjects=True)
+        cmds.animLayer(self.anchor_layer, edit=True, addSelectedObjects=True)
         for layer in anim_layers:
             cmds.animLayer(layer, edit=True, sel=False, prf=False)
-        cmds.animLayer(tmp_layer, edit=True, sel=True, prf=True)
-        # For each anchor, snap self's translation to anchor and set keys (remember to remove dictionarys from set_anchors)
+        cmds.animLayer(self.anchor_layer, edit=True, sel=True, prf=True)
         for anchor in self.anchors:
-            print('anchor is: ' + anchor)
             anchor_frame = anchor.split('_')[1]
-            print('Matching to anchor ' + anchor)
             cmds.currentTime(anchor_frame)          
             cmds.matchTransform(self.Name, anchor, position=True)
             cmds.setKeyframe(self.Name, at=['translate' + axis_1, 'translate' + axis_2])
-        # Delete auto_rotation layer
-        cmds.delete(self.rot_layer_name)
-        # derive rotation
+        for channel in list(['X', 'Y', 'Z']):
+            cmds.setAttr(self.anchor_display_layer + '|' + self.Name + '.translate' + channel, lock=True)
         self.derive_rotation(axis_1, axis_2)
-        # Delete temp offset layer and auto_translation layer
-        # cmds.delete(tmp_layer)
-        cmds.animLayer(tmp_layer, edit=True, mute=True)
-        cmds.delete(self.trans_layer_name)
-        # integrate_translation
-        self.integrate_translation(axis_1, axis_2)
+        for channel in list(['X', 'Y', 'Z']):
+            cmds.setAttr(self.anchor_display_layer + '|' + self.Name + '.translate' + channel, lock=False)
