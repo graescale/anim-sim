@@ -279,12 +279,12 @@ class Flyer:
         Returns:
             None
         """
-        
+
         print('|anchors_rebuild|')
-        self.anchor_layer = self.Name + ANCHOR_LAYER
+        self.anchor_layer = self.Name + '_' + ANCHOR_LAYER
         anim_layers = cmds.ls(type='animLayer')
-        cmds.animLayer(self.anchor_layer)
-        cmds.select(self.Name)
+        h.create_anim_layer(self.Name, self.anchor_layer, False)
+        cmds.animLayer(self.layer_name, edit=True, mute=False)
         cmds.animLayer(self.anchor_layer, edit=True, addSelectedObjects=True)
         for layer in anim_layers:
             cmds.animLayer(layer, edit=True, sel=False, prf=False)
@@ -294,8 +294,11 @@ class Flyer:
             cmds.currentTime(anchor_frame)          
             cmds.matchTransform(self.Name, anchor, position=True)
             cmds.setKeyframe(self.Name, at=['translate' + axis_1, 'translate' + axis_2])
-        for channel in list(['X', 'Y', 'Z']):
-            cmds.setAttr(self.anchor_display_layer + '|' + self.Name + '.translate' + channel, lock=True)
+        # print('self.anchor_layer is %s' % self.anchor_layer)
+        # print('self.Name is %s' % self.Name)
+        # for channel in list(['X', 'Y', 'Z']):
+        #     print('channel is %s' % channel)
+        #     cmds.setAttr(self.layer_name + '|' + self.Name + '.translate' + channel, lock=True)
         self.derive_rotation(axis_1, axis_2)
-        for channel in list(['X', 'Y', 'Z']):
-            cmds.setAttr(self.anchor_display_layer + '|' + self.Name + '.translate' + channel, lock=False)
+        # for channel in list(['X', 'Y', 'Z']):
+        #     cmds.setAttr(self.layer_name + '|' + self.Name + '.translate' + channel, lock=False)

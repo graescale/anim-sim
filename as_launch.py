@@ -194,7 +194,7 @@ class AnimSim:
             self.flyer.Scale = self.wgAnimSim.sldScale.value()
             self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
             self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()
-            self.flyer.layer_name = self.flyer.Name + LAYER_NAME
+            self.flyer.layer_name = self.flyer.Name + '_' + LAYER_NAME
 
         else:
             print('Selection box is empty. Nothing to update.')
