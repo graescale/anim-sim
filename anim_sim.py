@@ -128,7 +128,6 @@ class Flyer:
         """
 
         print('|derive_rotation|')
-        #self.extract_anim(self.Name, 'translation')
         if cmds.animLayer(self.layer_name, query=True, exists=True):
             cmds.delete(self.layer_name)
         self.get_scene_data()
@@ -173,34 +172,41 @@ class Flyer:
     def set_anchor(self, axis_1, axis_2):
 
         print('|set_anchor|')
+        if not cmds.objExists(ANCHORS):
+            cmds.group(empty=True, name=ANCHORS, parent=ROOT)
         self.anchor_display_layer = self.Name + '_anchors'
         current_time = str(cmds.currentTime(query=True)).split('.')[0]
         print('current_time is: ' + current_time)
         anchor_name = self.Name + '_' + str(current_time) + '_anchor'
         print('anchor_name is: ' + anchor_name)
-        if anchor_name not in self.anchors:
+
+        anchors = cmds.listRelatives(ANCHORS)
+        if not anchors:
+            anchors = []
+        if anchor_name not in anchors:
             cmds.select(self.Name)
             anchor = cmds.duplicate(name=anchor_name)[0]
-            self.anchors.append(anchor)
+            #self.anchors.append(anchor)
             cmds.parent(anchor, ANCHORS)
             try:
                 cmds.editDisplayLayerMembers(self.anchor_display_layer, query=True)
             except:
                 cmds.createDisplayLayer(name=self.anchor_display_layer)
-            cmds.editDisplayLayerMembers(self.anchor_display_layer, anchor, noRecurse=True)    
+            cmds.editDisplayLayerMembers(self.anchor_display_layer, anchor, noRecurse=True)
+            cmds.setAttr(self.anchor_display_layer, 1) 
         else:
             cmds.delete(anchor_name)
-            self.anchors.remove(anchor_name)
+            #self.anchors.remove(anchor_name)
 
 
     def remove_anchors(self):
 
+        anchors = cmds.listRelatives(ANCHORS)
+        for anchor in anchors:
+            cmds.delete(anchor)
         self.anchors = []
-        cmds.delete(ANCHORS)
         cmds.delete(self.anchor_display_layer)
-
-        # Get the anchor times
-        # Turn off auto_translation and turn on _original_translation
+        cmds.delete(self.anchor_layer)
 
 
 
@@ -281,15 +287,19 @@ class Flyer:
         """
 
         print('|anchors_rebuild|')
+        anchors = cmds.listRelatives(ANCHORS)
         self.anchor_layer = self.Name + '_' + ANCHOR_LAYER
+        if cmds.animLayer(self.anchor_layer, query=True, exists=True):
+            cmds.delete(self.anchor_layer)
         anim_layers = cmds.ls(type='animLayer')
         h.create_anim_layer(self.Name, self.anchor_layer, False)
         cmds.animLayer(self.layer_name, edit=True, mute=False)
-        cmds.animLayer(self.anchor_layer, edit=True, addSelectedObjects=True)
+        cmds.animLayer(self.anchor_layer, edit=True, moveLayerAfter=self.layer_name)
         for layer in anim_layers:
             cmds.animLayer(layer, edit=True, sel=False, prf=False)
         cmds.animLayer(self.anchor_layer, edit=True, sel=True, prf=True)
-        for anchor in self.anchors:
+        for anchor in anchors:
+            print('anchor is %s' % anchor)
             anchor_frame = anchor.split('_')[1]
             cmds.currentTime(anchor_frame)          
             cmds.matchTransform(self.Name, anchor, position=True)
@@ -299,6 +309,8 @@ class Flyer:
         # for channel in list(['X', 'Y', 'Z']):
         #     print('channel is %s' % channel)
         #     cmds.setAttr(self.layer_name + '|' + self.Name + '.translate' + channel, lock=True)
-        self.derive_rotation(axis_1, axis_2)
+        
+        #self.derive_rotation(axis_1, axis_2)
+        
         # for channel in list(['X', 'Y', 'Z']):
         #     cmds.setAttr(self.layer_name + '|' + self.Name + '.translate' + channel, lock=False)
