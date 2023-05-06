@@ -106,7 +106,7 @@ class AnimSim:
             self.wgAnimSim.lblStatus.setText("Target already exists.")
         elif len(cmds.ls(sl=True)) == 1:
             self.make_flyer(sel)
-            self.target = self.flyer.Name + '_target'
+            self.target = self.flyer.name + '_target'
             h.create_dag(self.target, self.target_group)
             self.update_selections()
             self.create_attributes()
@@ -157,7 +157,7 @@ class AnimSim:
         if (self.flyer.fidelity % 2) == 0:
             self.wgAnimSim.lblStatus.setText('Fidelity value must be an odd number')
         else:
-            target_name = self.flyer.Name + '_target'
+            target_name = self.flyer.name + '_target'
             self.flyer.derive_rotation(self.flyer.motion_plane[0], self.flyer.motion_plane[1], 3)
             self.flyer.integrate_translation(self.flyer.motion_plane[0], self.flyer.motion_plane[1])
             self.write_parameters()
@@ -172,12 +172,14 @@ class AnimSim:
     #***************************************************************************
     # PROCESS   
     def make_flyer(self, dagObject):
+        print('|make_flyer|')
+        setattr(self, 'foo', Flyer(dagObject))
         if not self.flyer:
             self.flyer = Flyer(dagObject)
-        elif self.flyer.Name != dagObject:
+        elif self.flyer.name != dagObject:
             self.flyer = Flyer(dagObject)
         else:
-            print('%s already exists.' % self.flyer.Name)
+            print('%s already exists.' % self.flyer.name)
 
 
     def update_flyer_attrs(self):
@@ -186,15 +188,15 @@ class AnimSim:
             current_sel = self.wgAnimSim.cbxName.currentText()
             if not self.flyer:
                 self.make_flyer(current_sel)
-            elif self.flyer.Name != current_sel:
+            elif self.flyer.name != current_sel:
                 print('self.flyer did not match current selection.')
                 self.make_flyer(current_sel)
-            self.target = self.flyer.Name + '_target'
+            self.target = self.flyer.name + '_target'
             self.flyer.motion_plane = list(str(self.wgAnimSim.cbxMotionPlane.currentText()))
             self.flyer.Scale = self.wgAnimSim.sldScale.value()
             self.flyer.fidelity = self.wgAnimSim.sldFidelity.value()
             self.flyer.auto_roll = self.wgAnimSim.chkAutoRoll.isChecked()
-            self.flyer.layer_name = self.flyer.Name + '_' + LAYER_NAME
+            self.flyer.layer_name = self.flyer.name + '_' + LAYER_NAME
 
         else:
             print('Selection box is empty. Nothing to update.')
@@ -243,7 +245,7 @@ class AnimSim:
             """
 
         print('|write_parameters|')
-        cmds.setAttr(self.target + '.Name', self.flyer.Name, type='string')
+        cmds.setAttr(self.target + '.Name', self.flyer.name, type='string')
         if self.flyer.parent:
             cmds.setAttr(self.target + '.parent', self.flyer.parent, type='string')
         cmds.setAttr(self.target + '.motionPlane', self.flyer.motion_plane, type='string')
@@ -275,7 +277,7 @@ class AnimSim:
     def create_attributes(self):
 
         PARAMS = [
-            {'Name': ['string', 'dt', self.flyer.Name]},
+            {'Name': ['string', 'dt', self.flyer.name]},
             {'parent': ['string', 'dt', self.flyer.parent]},
             {'motionPlane': ['string', 'dt', self.flyer.motion_plane]},
             {'fidelity': ['long', 'at', self.flyer.fidelity]},

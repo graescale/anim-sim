@@ -31,7 +31,7 @@ ANCHOR_LAYER = 'Anchor_Offset'
 # CLASS
 class Flyer:
     def __init__(self, name):
-        self.Name = name
+        self.name = name
         self.start_frame = ''
         self.end_frame = ''
         self.key_frames = []
@@ -78,12 +78,12 @@ class Flyer:
         print('|get_anim_data|')
         self.create_world_space_buffer()
         # Make a list of the key_frames to be used later in both modes.
-        self.key_frames = cmds.keyframe(self.Name + '_buffer_raw', attribute=['translate', 'rotate'], query=True, timeChange=True)
+        self.key_frames = cmds.keyframe(self.name + '_buffer_raw', attribute=['translate', 'rotate'], query=True, timeChange=True)
 
         # Make a dictionary containing lists of keyframe values for each attribute.
         anim_data = {}
         for attr in attributes:
-            anim_data[attr] = cmds.keyframe(self.Name + '_buffer_raw', attribute='.' + attr, query=True, valueChange=True)  
+            anim_data[attr] = cmds.keyframe(self.name + '_buffer_raw', attribute='.' + attr, query=True, valueChange=True)  
         return anim_data
 
 
@@ -93,7 +93,7 @@ class Flyer:
         print(self.fidelity)
         print('Auto Roll is:')
         print(self.auto_roll)
-        buffer_raw = self.Name + '_buffer_raw'
+        buffer_raw = self.name + '_buffer_raw'
 
         pm.createNode('transform', n = buffer_raw, ss = True)
         cmds.setAttr(buffer_raw + '.rotateOrder', 2)
@@ -104,7 +104,7 @@ class Flyer:
             cmds.parent( buffer_raw, self.parent )
 
         # Constrain buffer to object, bake it, delete constraint.
-        cmds.parentConstraint(self.Name, buffer_raw, name='buffer_constraint')
+        cmds.parentConstraint(self.name, buffer_raw, name='buffer_constraint')
         time_range = (self.start_frame, self.end_frame)
         if self.auto_roll == True:
             # Automatically add pre / post roll from the fidelity value
@@ -139,7 +139,7 @@ class Flyer:
         self.accel_axis_1 = h.get_derivative(self.pos_axis_1, 2, True, self.fidelity)
         self.accel_axis_2 = h.get_derivative(self.pos_axis_2, 2, True, self.fidelity)
         self.copy_rot_to_layer(self.Scale, axis_1, axis_2)
-        cmds.delete(self.Name + '_buffer_raw')
+        cmds.delete(self.name + '_buffer_raw')
 
 
     def integrate_translation(self, axis_1, axis_2):
@@ -159,9 +159,9 @@ class Flyer:
         # Get the local starting position
         if cmds.animLayer(self.layer_name, query=True, exists=True):
             cmds.animLayer(self.layer_name, edit=True, mute=True)
-        self.start_pos_axis_1 = cmds.getAttr(self.Name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
+        self.start_pos_axis_1 = cmds.getAttr(self.name + '.translate' + axis_1, time=self.start_frame - self.fidelity)
         print('self.start_pos_axis_1 is %s' % self.start_pos_axis_1)
-        self.start_pos_axis_2 = cmds.getAttr(self.Name + '.translate' + axis_2, time=self.start_frame - self.fidelity)
+        self.start_pos_axis_2 = cmds.getAttr(self.name + '.translate' + axis_2, time=self.start_frame - self.fidelity)
         if cmds.animLayer(self.layer_name, query=True, exists=True):
             cmds.animLayer(self.layer_name, edit=True, mute=False)
         self.pos_axis_1 = h.get_integral(self.rot_axis_1, 2)
@@ -174,26 +174,25 @@ class Flyer:
         print('|set_anchor|')
         if not cmds.objExists(ANCHORS):
             cmds.group(empty=True, name=ANCHORS, parent=ROOT)
-        self.anchor_display_layer = self.Name + '_anchors'
+        anchor_display_layer = self.name + '_anchors'
         current_time = str(cmds.currentTime(query=True)).split('.')[0]
         print('current_time is: ' + current_time)
-        anchor_name = self.Name + '_' + str(current_time) + '_anchor'
+        anchor_name = self.name + '_' + str(current_time) + '_anchor'
         print('anchor_name is: ' + anchor_name)
-
         anchors = cmds.listRelatives(ANCHORS)
         if not anchors:
             anchors = []
         if anchor_name not in anchors:
-            cmds.select(self.Name)
+            cmds.select(self.name)
             anchor = cmds.duplicate(name=anchor_name)[0]
             #self.anchors.append(anchor)
             cmds.parent(anchor, ANCHORS)
             try:
-                cmds.editDisplayLayerMembers(self.anchor_display_layer, query=True)
+                cmds.editDisplayLayerMembers(anchor_display_layer, query=True)
             except:
-                cmds.createDisplayLayer(name=self.anchor_display_layer)
-            cmds.editDisplayLayerMembers(self.anchor_display_layer, anchor, noRecurse=True)
-            cmds.setAttr(self.anchor_display_layer, 1) 
+                cmds.createDisplayLayer(name=anchor_display_layer)
+            cmds.editDisplayLayerMembers(anchor_display_layer, anchor, noRecurse=True)
+            cmds.setAttr(anchor_display_layer + '.displayType', 1) 
         else:
             cmds.delete(anchor_name)
             #self.anchors.remove(anchor_name)
@@ -202,11 +201,15 @@ class Flyer:
     def remove_anchors(self):
 
         anchors = cmds.listRelatives(ANCHORS)
-        for anchor in anchors:
-            cmds.delete(anchor)
-        self.anchors = []
-        cmds.delete(self.anchor_display_layer)
-        cmds.delete(self.anchor_layer)
+        try:
+            for anchor in anchors:
+                cmds.delete(anchor)
+            self.anchors = []
+            cmds.delete(self.anchor_display_layer)
+            cmds.delete(self.anchor_layer)
+        except:
+            print('No anchors to remove')
+
 
 
 
@@ -227,7 +230,7 @@ class Flyer:
         print('|copy_rot_to_layer|')
         axis1_mult = 1
         axis2_mult = 1
-        h.create_anim_layer(self.Name, self.layer_name, True)
+        h.create_anim_layer(self.name, self.layer_name, True)
         cmds.animLayer(self.layer_name, edit=True, sel=True, prf=True)
         if axis_1 == 'X' and axis_2 == 'Y':
             axis_1 = 'Z'
@@ -247,8 +250,8 @@ class Flyer:
         self.rot_axis_1_dict = dict(zip(self.key_frames, self.rot_axis_1))
         self.rot_axis_2_dict = dict(zip(self.key_frames, self.rot_axis_2))
         for key in self.rot_axis_1_dict:
-            cmds.setKeyframe(self.Name, time=key, at='rotate' + axis_1, value=(self.rot_axis_1_dict[key] * scale * axis1_mult) )
-            cmds.setKeyframe(self.Name, time=key, at='rotate' + axis_2, value=(self.rot_axis_2_dict[key] * scale * axis2_mult) )
+            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_1, value=(self.rot_axis_1_dict[key] * scale * axis1_mult) )
+            cmds.setKeyframe(self.name, time=key, at='rotate' + axis_2, value=(self.rot_axis_2_dict[key] * scale * axis2_mult) )
   
 
     def copy_trans_to_layer(self, scale, axis_1, axis_2):
@@ -271,8 +274,8 @@ class Flyer:
         print('start_pos_axis_1 is %s' % self.start_pos_axis_1)
         print ('self.pos_axis_1_dict at frame 1 is %s' % self.pos_axis_1_dict[1])
         for key in self.pos_axis_1_dict:
-            cmds.setKeyframe(self.Name, animLayer=self.layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] + self.start_pos_axis_1) )
-            cmds.setKeyframe(self.Name, animLayer=self.layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] + self.start_pos_axis_2) )
+            cmds.setKeyframe(self.name, animLayer=self.layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] + self.start_pos_axis_1) )
+            cmds.setKeyframe(self.name, animLayer=self.layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] + self.start_pos_axis_2) )
 
 
     def anchors_rebuild(self, axis_1, axis_2):
@@ -288,11 +291,11 @@ class Flyer:
 
         print('|anchors_rebuild|')
         anchors = cmds.listRelatives(ANCHORS)
-        self.anchor_layer = self.Name + '_' + ANCHOR_LAYER
+        self.anchor_layer = self.name + '_' + ANCHOR_LAYER
         if cmds.animLayer(self.anchor_layer, query=True, exists=True):
             cmds.delete(self.anchor_layer)
         anim_layers = cmds.ls(type='animLayer')
-        h.create_anim_layer(self.Name, self.anchor_layer, False)
+        h.create_anim_layer(self.name, self.anchor_layer, False)
         cmds.animLayer(self.layer_name, edit=True, mute=False)
         cmds.animLayer(self.anchor_layer, edit=True, moveLayerAfter=self.layer_name)
         for layer in anim_layers:
@@ -302,8 +305,8 @@ class Flyer:
             print('anchor is %s' % anchor)
             anchor_frame = anchor.split('_')[1]
             cmds.currentTime(anchor_frame)          
-            cmds.matchTransform(self.Name, anchor, position=True)
-            cmds.setKeyframe(self.Name, at=['translate' + axis_1, 'translate' + axis_2])
+            cmds.matchTransform(self.name, anchor, position=True)
+            cmds.setKeyframe(self.name, at=['translate' + axis_1, 'translate' + axis_2])
         # print('self.anchor_layer is %s' % self.anchor_layer)
         # print('self.Name is %s' % self.Name)
         # for channel in list(['X', 'Y', 'Z']):
