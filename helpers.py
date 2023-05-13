@@ -2,7 +2,7 @@
 # content = helper functions for animsim.
 #
 # version      = 0.4.1
-# date         = 2021-12-19
+# date         = 2023-05-13
 #
 # dependencies = Maya, numpy, scipy
 #

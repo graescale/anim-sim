@@ -2,12 +2,11 @@
 # content = Simulates hovering motion.
 #
 # version      = 1.0.0
-# date         = 2022-01-26
+# date         = 2023-05-13
 # how to       => anim_sim = animSim()
 #
 # dependencies = Maya
 #
-# to dos = Restructure workflow, simplify code
 # author = Grae Revell <grae.revell@gmail.com>
 #*******************************************************************************
 import os
@@ -174,33 +173,37 @@ class Flyer:
         print('|set_anchor|')
         if not cmds.objExists(ANCHORS):
             cmds.group(empty=True, name=ANCHORS, parent=ROOT)
-        anchor_display_layer = self.name + '_anchors'
+        anchor_grp = self.name + '_Anchors'
+        print('anchor_grp is %s' % anchor_grp)
+        if not cmds.objExists(anchor_grp):
+            cmds.group(empty=True, name=anchor_grp, parent=ANCHORS)
+            print('created anchor_grp')
+        self.anchor_display_layer = self.name + '_anchors'
         current_time = str(cmds.currentTime(query=True)).split('.')[0]
-        print('current_time is: ' + current_time)
         anchor_name = self.name + '_' + str(current_time) + '_anchor'
-        print('anchor_name is: ' + anchor_name)
-        anchors = cmds.listRelatives(ANCHORS)
+        anchors = cmds.listRelatives(self.name + '_Anchors')
         if not anchors:
             anchors = []
         if anchor_name not in anchors:
             cmds.select(self.name)
             anchor = cmds.duplicate(name=anchor_name)[0]
-            #self.anchors.append(anchor)
-            cmds.parent(anchor, ANCHORS)
+            cmds.parent(anchor, anchor_grp)
             try:
-                cmds.editDisplayLayerMembers(anchor_display_layer, query=True)
+                cmds.editDisplayLayerMembers(self.anchor_display_layer, query=True)
             except:
-                cmds.createDisplayLayer(name=anchor_display_layer)
-            cmds.editDisplayLayerMembers(anchor_display_layer, anchor, noRecurse=True)
-            cmds.setAttr(anchor_display_layer + '.displayType', 1) 
+                cmds.createDisplayLayer(name=self.anchor_display_layer)
+            cmds.editDisplayLayerMembers(self.anchor_display_layer, anchor, noRecurse=True)
+            cmds.setAttr(self.anchor_display_layer + '.displayType', 1)
+            return current_time
         else:
             cmds.delete(anchor_name)
-            #self.anchors.remove(anchor_name)
+            return False
+
 
 
     def remove_anchors(self):
 
-        anchors = cmds.listRelatives(ANCHORS)
+        anchors = cmds.listRelatives(self.name + '_Anchors')
         try:
             for anchor in anchors:
                 cmds.delete(anchor)
@@ -272,7 +275,6 @@ class Flyer:
         self.pos_axis_1_dict = dict(zip(self.key_frames, self.pos_axis_1))
         self.pos_axis_2_dict = dict(zip(self.key_frames, self.pos_axis_2))
         print('start_pos_axis_1 is %s' % self.start_pos_axis_1)
-        print ('self.pos_axis_1_dict at frame 1 is %s' % self.pos_axis_1_dict[1])
         for key in self.pos_axis_1_dict:
             cmds.setKeyframe(self.name, animLayer=self.layer_name, time=key, at='translate' + axis_1, value=(self.pos_axis_1_dict[key] + self.start_pos_axis_1) )
             cmds.setKeyframe(self.name, animLayer=self.layer_name, time=key, at='translate' + axis_2, value=(self.pos_axis_2_dict[key] + self.start_pos_axis_2) )
@@ -290,7 +292,7 @@ class Flyer:
         """
 
         print('|anchors_rebuild|')
-        anchors = cmds.listRelatives(ANCHORS)
+        anchors = cmds.listRelatives(self.name + '_Anchors')
         self.anchor_layer = self.name + '_' + ANCHOR_LAYER
         if cmds.animLayer(self.anchor_layer, query=True, exists=True):
             cmds.delete(self.anchor_layer)
