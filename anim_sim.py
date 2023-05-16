@@ -174,10 +174,8 @@ class Flyer:
         if not cmds.objExists(ANCHORS):
             cmds.group(empty=True, name=ANCHORS, parent=ROOT)
         anchor_grp = self.name + '_Anchors'
-        print('anchor_grp is %s' % anchor_grp)
         if not cmds.objExists(anchor_grp):
             cmds.group(empty=True, name=anchor_grp, parent=ANCHORS)
-            print('created anchor_grp')
         self.anchor_display_layer = self.name + '_anchors'
         current_time = str(cmds.currentTime(query=True)).split('.')[0]
         anchor_name = self.name + '_' + str(current_time) + '_anchor'

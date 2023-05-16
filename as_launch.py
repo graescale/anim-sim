@@ -108,6 +108,7 @@ class AnimSim:
             self.wgAnimSim.lblStatus.setText("Target already exists.")
         elif len(cmds.ls(sl=True)) == 1:
             self.make_flyer(self.selection)
+            print('self.selection is %s' % self.selection)
             self.target = self.flyers[self.selection].name + '_target'
             h.create_dag(self.target, self.target_group)
             self.update_selections()
@@ -289,13 +290,13 @@ class AnimSim:
             """
 
         print('|update_selections|')
+        print('blah')
         objects = cmds.listRelatives(TARGETS, children=True, fullPath=False)
         self.wgAnimSim.cbxName.clear()
         if objects:
             for target in objects:
-                target_tmp = target.split('_')
-                target_tmp.pop()
-                self.wgAnimSim.cbxName.addItem(target_tmp[0])
+                target= "_".join(target.split("_")[:-1])
+                self.wgAnimSim.cbxName.addItem(target)
                 #self.wgAnimSim.cbxName.addItem(target.split('_')[0])
                 count = self.wgAnimSim.cbxName.count()
                 self.wgAnimSim.cbxName.setCurrentIndex(count - 1)
