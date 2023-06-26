@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>576</width>
-    <height>696</height>
+    <height>712</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -243,7 +243,7 @@ color: rgb(33, 32, 35);</string>
         <item>
          <widget class="QPushButton" name="btnPgBuild">
           <property name="text">
-           <string>BUILD</string>
+           <string>SIMULATE</string>
           </property>
          </widget>
         </item>
@@ -299,7 +299,7 @@ color: rgb(33, 32, 35);</string>
                <string notr="true">font: 18pt &quot;Roboto&quot;;</string>
               </property>
               <property name="text">
-               <string>Build</string>
+               <string>Simulate</string>
               </property>
              </widget>
             </item>
@@ -377,7 +377,7 @@ color: rgb(33, 32, 35);</string>
                   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
                  </property>
                  <property name="text">
-                  <string>Fidelity</string>
+                  <string>Mass</string>
                  </property>
                 </widget>
                </item>
@@ -386,7 +386,7 @@ color: rgb(33, 32, 35);</string>
                  <item>
                   <widget class="QLabel" name="label_12">
                    <property name="text">
-                    <string>rough</string>
+                    <string>small</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -424,7 +424,7 @@ color: rgb(33, 32, 35);</string>
                  <item>
                   <widget class="QLabel" name="label_13">
                    <property name="text">
-                    <string>smooth</string>
+                    <string>large</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -479,7 +479,7 @@ color: rgb(33, 32, 35);</string>
                   <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
                  </property>
                  <property name="text">
-                  <string>Scale</string>
+                  <string>Rotation Scale</string>
                  </property>
                 </widget>
                </item>
@@ -503,7 +503,7 @@ color: rgb(33, 32, 35);</string>
                     <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
                    </property>
                    <property name="text">
-                    <string>small</string>
+                    <string>low</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -550,7 +550,7 @@ color: rgb(33, 32, 35);</string>
                     <string notr="true">font: 12pt &quot;Roboto&quot;;</string>
                    </property>
                    <property name="text">
-                    <string>large</string>
+                    <string>high</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
